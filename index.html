@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meta Ads 監査レポート — RELAXFORM</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Helvetica Neue', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Meiryo', Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fff;
+    padding: 40px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  /* ===== HEADER ===== */
+  .report-header {
+    border-bottom: 3px solid #2563eb;
+    padding-bottom: 16px;
+    margin-bottom: 28px;
+  }
+  .report-header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+  }
+  .report-meta {
+    font-size: 12px;
+    color: #666;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .report-meta span { display: flex; align-items: center; gap: 4px; }
+
+  /* ===== SECTION TITLE ===== */
+  h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a1a;
+    border-bottom: 2px solid #2563eb;
+    padding-bottom: 6px;
+    margin: 32px 0 16px;
+  }
+  h3 {
+    font-size: 13px;
+    font-weight: 700;
+    margin: 16px 0 8px;
+    color: #1a1a1a;
+  }
+
+  /* ===== HEALTH SCORE ===== */
+  .score-box {
+    background: #f3f4f6;
+    border-radius: 6px;
+    padding: 20px 24px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 13px;
+    line-height: 1.9;
+    white-space: pre;
+  }
+  .score-title-line {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  /* ===== TABLES ===== */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 12px;
+  }
+  thead tr {
+    background: #2563eb;
+    color: #fff;
+  }
+  thead th {
+    padding: 9px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.3px;
+  }
+  tbody tr:nth-child(even) { background: #f8f9fa; }
+  tbody tr:nth-child(odd) { background: #fff; }
+  tbody td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #e9ecef;
+    vertical-align: middle;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr.row-pass { background: #f0fdf4; }
+  tbody tr.row-warn { background: #fffbeb; }
+  tbody tr.row-fail { background: #fef2f2; }
+  tbody tr.row-critical { background: #fff0f0; }
+
+  /* ===== BADGES ===== */
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .badge-critical { background: #dc2626; color: #fff; }
+  .badge-high     { background: #ea580c; color: #fff; }
+  .badge-warning  { background: #d97706; color: #fff; }
+  .badge-pass     { background: #16a34a; color: #fff; }
+  .badge-fail     { background: #dc2626; color: #fff; }
+  .badge-info     { background: #2563eb; color: #fff; }
+
+  /* ===== CALLOUT BOXES ===== */
+  .callout {
+    border-left: 4px solid #ccc;
+    border-radius: 0 6px 6px 0;
+    padding: 14px 18px;
+    margin: 12px 0;
+    background: #fafafa;
+  }
+  .callout-critical { border-color: #dc2626; background: #fff5f5; }
+  .callout-high     { border-color: #ea580c; background: #fff8f0; }
+  .callout-warning  { border-color: #d97706; background: #fffbeb; }
+  .callout-pass     { border-color: #16a34a; background: #f0fdf4; }
+  .callout-info     { border-color: #2563eb; background: #eff6ff; }
+  .callout-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .callout-body { font-size: 12px; color: #374151; line-height: 1.7; }
+  .callout-body ul { margin-left: 20px; margin-top: 6px; }
+  .callout-body li { margin-bottom: 4px; }
+  .callout-body strong { color: #111; }
+  .callout-body .inner-table { margin-top: 10px; }
+
+  /* ===== KPI CARDS ===== */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .kpi-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 14px 16px;
+    background: #fafafa;
+  }
+  .kpi-card.kpi-fail { border-color: #fca5a5; background: #fff5f5; }
+  .kpi-card.kpi-pass { border-color: #86efac; background: #f0fdf4; }
+  .kpi-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #9ca3af;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .kpi-value {
+    font-size: 24px;
+    font-weight: 900;
+    color: #111;
+    line-height: 1.1;
+  }
+  .kpi-card.kpi-fail .kpi-value { color: #dc2626; }
+  .kpi-card.kpi-pass .kpi-value { color: #16a34a; }
+  .kpi-sub {
+    font-size: 10px;
+    color: #9ca3af;
+    margin-top: 4px;
+  }
+
+  /* ===== FOOTER ===== */
+  .report-footer {
+    margin-top: 48px;
+    padding-top: 16px;
+    border-top: 1px solid #e5e7eb;
+    font-size: 10px;
+    color: #9ca3af;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* ===== MISC ===== */
+  .note {
+    font-size: 11px;
+    color: #6b7280;
+    font-style: italic;
+    margin: 8px 0;
+  }
+  .section-divider { margin: 8px 0 4px; }
+  code {
+    background: #f3f4f6;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-family: 'Courier New', monospace;
+  }
+  .text-red { color: #dc2626; font-weight: 700; }
+  .text-green { color: #16a34a; font-weight: 700; }
+  .text-orange { color: #ea580c; font-weight: 700; }
+  .text-bold { font-weight: 700; }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="report-header">
+  <h1>Meta Ads 監査レポート — RELAXFORM</h1>
+  <div class="report-meta">
+    <span>📅 期間：2026-05-16 〜 2026-06-14（30日間）</span>
+    <span>📱 プラットフォーム：Meta Ads（Instagram / Facebook）</span>
+    <span>🗓 作成日：2026-06-15</span>
+    <span>📊 データソース：Ads Manager エクスポート（CSVファイル）</span>
+  </div>
+</div>
+
+<!-- ===== HEALTH SCORE ===== -->
+<h2>Meta Ads Health Score</h2>
+
+<div class="score-box"><span class="score-title-line">Meta Ads Health Score: 38/100（Grade: F）</span>
+Pixel / CAPI Health:  データ未提供  ░░░░░░░░░░  (30%) ← Events Manager情報が必要
+Creative:             データ未提供  ░░░░░░░░░░  (30%) ← クリエイティブ詳細が必要
+Account Structure:    40 / 100    ████░░░░░░  (20%) ← 予算消化・構造に問題あり
+Audience & Delivery:  45 / 100    ████░░░░░░  (20%) ← 配信量・オーディエンスに課題</div>
+
+<div class="callout callout-warning" style="margin-top:12px;">
+  <div class="callout-title">⚠️ スコアについて</div>
+  <div class="callout-body">提供データはキャンペーン概要1行のみ。Pixelステータス・クリエイティブ詳細・広告セット別データが未提供のため、Account Structure と Audience のみ評価可能。完全なスコアには追加データが必要。</div>
+</div>
+
+<!-- ===== KPI SUMMARY ===== -->
+<h2>キャンペーン指標サマリー</h2>
+
+<div class="kpi-grid">
+  <div class="kpi-card kpi-fail">
+    <div class="kpi-label">消化金額（予算比）</div>
+    <div class="kpi-value">32%</div>
+    <div class="kpi-sub">¥16,006 / ¥50,000（30日経過）</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">プロフィール訪問数</div>
+    <div class="kpi-value">545件</div>
+    <div class="kpi-sub">目標：profile_visit_view</div>
+  </div>
+  <div class="kpi-card kpi-pass">
+    <div class="kpi-label">訪問単価（CPV）</div>
+    <div class="kpi-value">¥29.37</div>
+    <div class="kpi-sub">業界目安 ¥30〜60 → 良好</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">インプレッション</div>
+    <div class="kpi-value">12,177</div>
+    <div class="kpi-sub">日次平均：406 imp/日</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">リーチ</div>
+    <div class="kpi-value">9,459</div>
+    <div class="kpi-sub">フリークエンシー：推定 1.29</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">CPM</div>
+    <div class="kpi-value">¥1,315</div>
+    <div class="kpi-sub">日本平均 ¥800〜2,500 → 正常範囲</div>
+  </div>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>指標</th>
+      <th>実績値</th>
+      <th>ベンチマーク（日本平均）</th>
+      <th>評価</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="row-pass">
+      <td>CPM（1,000インプレ単価）</td>
+      <td><strong>¥1,315</strong></td>
+      <td>¥800〜2,500</td>
+      <td><span class="badge badge-pass">✅ PASS</span></td>
+    </tr>
+    <tr class="row-pass">
+      <td>フリークエンシー（推定）</td>
+      <td><strong>1.29</strong></td>
+      <td>&lt;3.0</td>
+      <td><span class="badge badge-pass">✅ PASS</span></td>
+    </tr>
+    <tr class="row-pass">
+      <td>プロフィール訪問率</td>
+      <td><strong>4.48%</strong></td>
+      <td>2〜5%目安</td>
+      <td><span class="badge badge-pass">✅ PASS</span></td>
+    </tr>
+    <tr class="row-pass">
+      <td>プロフィール訪問単価（CPV）</td>
+      <td><strong>¥29.37</strong></td>
+      <td>¥30〜60目安</td>
+      <td><span class="badge badge-pass">✅ 良好</span></td>
+    </tr>
+    <tr class="row-fail">
+      <td>予算消化率（30日経過）</td>
+      <td><strong class="text-red">32.0%</strong></td>
+      <td>70〜100%</td>
+      <td><span class="badge badge-fail">❌ FAIL</span></td>
+    </tr>
+    <tr class="row-fail">
+      <td>日次消化金額</td>
+      <td><strong class="text-red">¥533/日</strong></td>
+      <td>¥1,667/日（均等消化）</td>
+      <td><span class="badge badge-fail">❌ FAIL</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ===== FINDINGS ===== -->
+<h2>発見事項</h2>
+
+<!-- CRITICAL -->
+<div class="callout callout-critical">
+  <div class="callout-title"><span class="badge badge-critical">CRITICAL</span> C-01：予算消化が極めて低い — 機会損失が深刻</div>
+  <div class="callout-body">
+    <ul>
+      <li>30日間で¥50,000の予算に対し <strong>¥16,006（32%）</strong>しか消化されていない</li>
+      <li>終了日（7/5）まで残り21日で¥33,994を消化するには <strong>¥1,619/日</strong> が必要</li>
+      <li>現在の日次消化：約¥533/日（必要ペースの <strong>1/3以下</strong>）</li>
+      <li><strong>原因の疑い：</strong>オーディエンスが狭すぎる / 入札額が低い / Learning Limited状態</li>
+    </ul>
+    <table class="inner-table">
+      <thead><tr><th>現状</th><th>必要ペース</th><th>乖離</th></tr></thead>
+      <tbody>
+        <tr class="row-fail"><td>¥533/日</td><td>¥1,619/日</td><td class="text-red">−¥1,086/日（67%不足）</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- HIGH -->
+<div class="callout callout-high">
+  <div class="callout-title"><span class="badge badge-high">HIGH</span> H-01：インプレッション数が月間として極めて少ない</div>
+  <div class="callout-body">
+    <ul>
+      <li>月間 <strong>12,177 imp</strong> は非常に少ない（¥1,000/日の予算でも3,000〜5,000 imp/日が見込める）</li>
+      <li>ターゲット範囲の絞り込み過ぎ、または入札競争での敗退が原因の可能性が高い</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-high">
+  <div class="callout-title"><span class="badge badge-high">HIGH</span> H-02：アトリビューション設定が短すぎる</div>
+  <div class="callout-body">
+    <ul>
+      <li>現設定：<strong>クリックから1日間</strong></li>
+      <li>推奨：<strong>クリック7日間 / ビュー1日間</strong>（Metaデフォルト）</li>
+      <li>短いウィンドウでは実際の成果が過小評価され、アルゴリズムの最適化も妨げられる</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-high">
+  <div class="callout-title"><span class="badge badge-high">HIGH</span> H-03：単一キャンペーン・単一目標のリスク</div>
+  <div class="callout-body">
+    <ul>
+      <li>プロフィール訪問はブランド認知目的として有効だが、<strong>売上・問い合わせへの導線が不明</strong></li>
+      <li>リード獲得・サイトへのトラフィックなど、複数の目標キャンペーンの設計を推奨</li>
+    </ul>
+  </div>
+</div>
+
+<!-- WARNING -->
+<div class="callout callout-warning">
+  <div class="callout-title"><span class="badge badge-warning">WARNING</span> W-01：Pixel / CAPIステータス未確認</div>
+  <div class="callout-body">
+    <ul>
+      <li>CAPI未設定の場合、iOS 14.5以降のユーザーデータが <strong>30〜40%失損</strong> する</li>
+      <li>Events ManagerでEMQスコアを確認 → 目標：<strong>8.0以上</strong></li>
+    </ul>
+    <table class="inner-table">
+      <thead><tr><th>EMQスコア</th><th>ステータス</th><th>対処</th></tr></thead>
+      <tbody>
+        <tr class="row-pass"><td>8.0〜10.0</td><td>✅ 優秀</td><td>現状維持</td></tr>
+        <tr class="row-warn"><td>6.0〜7.9</td><td>⚠️ 良好</td><td>customer_informationパラメータ追加</td></tr>
+        <tr class="row-fail"><td>&lt;6.0</td><td>❌ 要改善</td><td>CAPI実装 + Enhanced Matching 設定</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="callout callout-warning">
+  <div class="callout-title"><span class="badge badge-warning">WARNING</span> W-02：クリエイティブ構成が不明 / キャンペーン命名が未整備</div>
+  <div class="callout-body">
+    <ul>
+      <li>Metaの推奨：広告セットあたり <strong>5本以上</strong>（動画・カルーセル・静止画を組み合わせ）</li>
+      <li>キャンペーン名の命名規則を整備 例：<code>[RELAXFORM]_[トラフィック]_[IG]_[202605]</code></li>
+    </ul>
+  </div>
+</div>
+
+<!-- PASS -->
+<div class="callout callout-pass">
+  <div class="callout-title"><span class="badge badge-pass">PASS</span> 良好な点</div>
+  <div class="callout-body">
+    <ul>
+      <li>プロフィール訪問単価（¥29.37）は業界水準を <strong>下回る優良なCPV</strong></li>
+      <li>フリークエンシー1.29は適切（同一ユーザーへの過剰表示なし）</li>
+      <li>CPMは日本平均の許容範囲内</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===== ACTION PLAN ===== -->
+<h2>推奨アクションプラン</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>アクション</th>
+      <th>工数</th>
+      <th>期待効果</th>
+      <th>優先度</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="row-pass">
+      <td>1</td>
+      <td><strong>Advantage+ オーディエンスへの切り替え</strong><br><span style="font-size:11px;color:#6b7280">広告セット → オーディエンス設定で変更</span></td>
+      <td>5分</td>
+      <td>配信量・予算消化の大幅改善</td>
+      <td><span class="badge badge-critical">即対応</span></td>
+    </tr>
+    <tr class="row-pass">
+      <td>2</td>
+      <td><strong>アトリビューションを「7日クリック / 1日ビュー」に変更</strong></td>
+      <td>3分</td>
+      <td>成果の正確な計測・最適化精度向上</td>
+      <td><span class="badge badge-critical">即対応</span></td>
+    </tr>
+    <tr class="row-pass">
+      <td>3</td>
+      <td><strong>Learning Limited 状態の確認</strong><br><span style="font-size:11px;color:#6b7280">広告セット詳細で確認 → 該当なら広告セット統合 or オーディエンス拡大</span></td>
+      <td>5分</td>
+      <td>配信量の正常化</td>
+      <td><span class="badge badge-critical">即対応</span></td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><strong>日次予算への変更を検討</strong><br><span style="font-size:11px;color:#6b7280">通算¥50,000 → 1日¥2,000の日次予算に変更</span></td>
+      <td>5分</td>
+      <td>消化ペースのコントロール改善</td>
+      <td><span class="badge badge-high">1〜2週間</span></td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><strong>動画クリエイティブ（Reels形式）を追加</strong></td>
+      <td>2〜3時間</td>
+      <td>配信量・CTR・エンゲージメント改善</td>
+      <td><span class="badge badge-high">1〜2週間</span></td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><strong>Pixel / CAPI の設定状態を確認・強化</strong><br><span style="font-size:11px;color:#6b7280">Events ManagerでEMQスコア確認（目標8.0以上）</span></td>
+      <td>30分〜</td>
+      <td>データ損失防止・最適化精度向上</td>
+      <td><span class="badge badge-high">1〜2週間</span></td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td><strong>キャンペーン目標の多様化</strong><br><span style="font-size:11px;color:#6b7280">エンゲージメント / リンクのクリック / リード獲得を追加</span></td>
+      <td>1〜2時間</td>
+      <td>ブランド認知→興味→購買の導線構築</td>
+      <td><span class="badge badge-warning">1ヶ月以内</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ===== SCORE ROADMAP ===== -->
+<h2>スコア改善ロードマップ</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>対応</th>
+      <th>現在のスコアへの影響</th>
+      <th>対応後の改善見込み</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Advantage+ オーディエンス切り替え</td>
+      <td>Audience & Delivery: 45</td>
+      <td class="text-green">→ 65〜70 に改善見込み</td>
+    </tr>
+    <tr>
+      <td>アトリビューション設定変更</td>
+      <td>Account Structure: 40</td>
+      <td class="text-green">→ 55〜60 に改善見込み</td>
+    </tr>
+    <tr>
+      <td>Pixel / CAPI 確認・設定</td>
+      <td>Pixel / CAPI Health: 不明</td>
+      <td class="text-green">→ 70〜85 に改善見込み</td>
+    </tr>
+    <tr>
+      <td>クリエイティブ多様化（5本以上）</td>
+      <td>Creative: 不明</td>
+      <td class="text-green">→ 60〜75 に改善見込み</td>
+    </tr>
+    <tr style="background:#f3f4f6;">
+      <td><strong>全対応後（総合スコア）</strong></td>
+      <td><strong class="text-red">38 / 100（F）</strong></td>
+      <td><strong class="text-green">→ 65〜75 / 100（C〜B）</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:20px;">
+  <div class="callout-title">📋 完全な分析に必要な追加データ</div>
+  <div class="callout-body">
+    <ul>
+      <li>Events ManagerのスクリーンショットまたはEMQスコア（Pixel / CAPI 評価のため）</li>
+      <li>クリエイティブ別パフォーマンスレポート（クリエイティブ疲労検出のため）</li>
+      <li>広告セット別のエクスポートデータ（Learning Limited確認・構造評価のため）</li>
+      <li>オーディエンス設定の詳細（ターゲット範囲精査のため）</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div class="report-footer">
+  <span><strong>GOOD VIBES AGENCY</strong> — GVA Bot | ads-meta skill</span>
+  <span>Generated: 2026-06-15 | Confidential</span>
+</div>
+
+</body>
+</html>
