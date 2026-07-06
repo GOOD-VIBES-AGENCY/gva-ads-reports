@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOFER × USAGI ONLINE — Influencer PR Campaign Report</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --black: #0a0a0a;
+  --black-soft: #1c1c1e;
+  --gray-dark: #3a3a3c;
+  --gray-mid: #6c6c70;
+  --gray-light: #aeaeb2;
+  --sand-light: #f7f6f3;
+  --sand-mid: #edeae3;
+  --sand-dark: #ddd8ce;
+  --gold: #c8a96e;
+  --gold-muted: #b8965a;
+  --white: #ffffff;
+  --green: #34c759;
+  --orange: #ff9f0a;
+  --red: #ff3b30;
+  --blue: #007aff;
+  --font: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "ヒラギノ角ゴシック Pro", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴシック ProN", "Hiragino Kaku Gothic ProN", sans-serif;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-xs: 6px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font);
+  background: var(--sand-light);
+  color: var(--black);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrapper {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 0 0 60px;
+}
+
+/* ===== COVER ===== */
+.cover {
+  background: var(--black);
+  padding: 72px 56px 60px;
+  position: relative;
+}
+.cover-line {
+  width: 30%;
+  height: 1px;
+  background: var(--gold);
+  margin-bottom: 40px;
+}
+.cover-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.cover-title {
+  font-size: 36px;
+  color: var(--white);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 32px;
+}
+.cover-meta {
+  font-size: 13px;
+  color: var(--gray-light);
+  line-height: 1.8;
+  margin-bottom: 56px;
+}
+.cover-meta span {
+  color: var(--gold);
+}
+.cover-footer {
+  font-size: 11px;
+  color: var(--gray-mid);
+  letter-spacing: 0.05em;
+}
+
+/* ===== SECTION ===== */
+.section {
+  background: var(--white);
+  padding: 48px 56px;
+  border-bottom: 1px solid var(--sand-dark);
+}
+.section:last-child { border-bottom: none; }
+
+.section-label {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.section-title {
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--black);
+  letter-spacing: -0.01em;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--sand-dark);
+}
+.subsection-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--black);
+  margin: 36px 0 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--sand-dark);
+}
+
+/* ===== KPI CARDS ===== */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 36px;
+}
+.kpi-card {
+  background: var(--white);
+  border: 1px solid var(--sand-dark);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 28px 32px;
+}
+.kpi-label {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray-light);
+  margin-bottom: 8px;
+}
+.kpi-value {
+  font-size: 48px;
+  font-weight: 200;
+  color: var(--black);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.kpi-sub {
+  font-size: 13px;
+  color: var(--gray-mid);
+}
+
+/* ===== BODY TEXT ===== */
+.body-text {
+  font-size: 15px;
+  line-height: 1.9;
+  color: var(--gray-dark);
+  margin-bottom: 20px;
+}
+.body-text:last-child { margin-bottom: 0; }
+
+/* ===== CAMPAIGN TABLE ===== */
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--sand-dark);
+}
+.info-table td {
+  padding: 14px 20px;
+  font-size: 14px;
+  border-bottom: 1px solid var(--sand-dark);
+  vertical-align: top;
+  line-height: 1.7;
+}
+.info-table tr:last-child td { border-bottom: none; }
+.info-table td:first-child {
+  width: 220px;
+  background: var(--sand-mid);
+  font-weight: 500;
+  color: var(--black);
+  font-size: 13px;
+  white-space: nowrap;
+}
+.info-table td:last-child {
+  background: var(--white);
+  color: var(--gray-dark);
+}
+
+/* ===== CHARTS ===== */
+.chart-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 24px 0;
+}
+.chart-card {
+  background: var(--white);
+  border: 1px solid var(--sand-dark);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+.chart-card-title {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray-mid);
+  margin-bottom: 16px;
+}
+.chart-container {
+  position: relative;
+  height: 200px;
+}
+
+/* ===== PROGRESS TABLE ===== */
+.progress-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 24px;
+}
+.progress-table thead tr {
+  background: var(--black);
+}
+.progress-table thead th {
+  color: var(--white);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 400;
+}
+.progress-table tbody tr {
+  border-bottom: 1px solid var(--sand-dark);
+}
+.progress-table tbody tr:last-child {
+  font-weight: 600;
+  background: var(--sand-mid);
+}
+.progress-table tbody td {
+  padding: 14px 16px;
+  font-size: 14px;
+  color: var(--gray-dark);
+}
+
+/* ===== INFLUENCER CARDS ===== */
+.tier-label {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 28px 0 14px;
+}
+.creator-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.creator-card {
+  background: var(--white);
+  border: 1px solid var(--sand-dark);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  border-top: 3px solid var(--gold);
+}
+.creator-card.tier2 { border-top-color: var(--black-soft); }
+.creator-card.tier3 { border-top-color: var(--gray-light); }
+
+.creator-name {
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--black);
+  margin-bottom: 10px;
+}
+.badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.badge {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+}
+.badge-tier {
+  background: #f5f0e8;
+  color: var(--gold-muted);
+}
+.badge-insight-ok {
+  background: #e8f5e9;
+  color: #1b5e20;
+}
+.badge-insight-pending {
+  background: #fff3e0;
+  color: #e65100;
+}
+.badge-gva {
+  background: #e3f2fd;
+  color: #0d47a1;
+}
+.creator-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+.metric-item {}
+.metric-label {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray-light);
+  margin-bottom: 3px;
+}
+.metric-value {
+  font-size: 20px;
+  font-weight: 300;
+  color: var(--black);
+  letter-spacing: -0.01em;
+}
+
+/* ===== INSIGHT STATUS CHART ===== */
+.chart-single {
+  display: flex;
+  justify-content: center;
+  margin: 24px 0;
+}
+.chart-single .chart-card {
+  width: 300px;
+}
+
+/* ===== INFO BANNER ===== */
+.info-banner {
+  background: var(--sand-mid);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+  font-size: 14px;
+  color: var(--gray-dark);
+  margin: 20px 0;
+}
+
+/* ===== PENDING TABLE ===== */
+.pending-card {
+  border: 1px solid var(--sand-dark);
+  border-left: 2px solid var(--orange);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-top: 20px;
+}
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.data-table thead tr {
+  background: var(--black);
+}
+.data-table thead th {
+  color: var(--white);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 11px 14px;
+  text-align: left;
+  font-weight: 400;
+}
+.data-table tbody tr {
+  border-bottom: 1px solid var(--sand-dark);
+}
+.data-table tbody tr:last-child { border-bottom: none; }
+.data-table tbody td {
+  padding: 12px 14px;
+  font-size: 13px;
+  color: var(--gray-dark);
+  vertical-align: middle;
+}
+.data-table tbody tr:hover { background: var(--sand-light); }
+
+/* ===== INSIGHT TABLE ===== */
+.insight-table-wrap {
+  overflow-x: auto;
+  margin-top: 20px;
+}
+
+/* ===== ACTION TABLE ===== */
+.action-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+.action-table thead tr { background: var(--black); }
+.action-table thead th {
+  color: var(--white);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 11px 16px;
+  text-align: left;
+  font-weight: 400;
+}
+.action-table tbody tr { border-bottom: 1px solid var(--sand-dark); }
+.action-table tbody td {
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--gray-dark);
+  vertical-align: middle;
+}
+.action-table tbody tr:hover { background: var(--sand-light); }
+.priority-badge {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.priority-critical {
+  background: #fff0ef;
+  color: var(--red);
+  border-left: 3px solid var(--red);
+}
+.priority-high {
+  background: #fff8ec;
+  color: #cc6600;
+  border-left: 3px solid var(--orange);
+}
+.priority-normal {
+  background: #fdf8ef;
+  color: var(--gold-muted);
+  border-left: 3px solid var(--gold);
+}
+.action-row-critical td:first-child { border-left: 3px solid var(--red); }
+.action-row-high td:first-child { border-left: 3px solid var(--orange); }
+.action-row-normal td:first-child { border-left: 3px solid var(--gold); }
+
+/* ===== SORTABLE TABLE ===== */
+.sort-table-wrap {
+  overflow-x: auto;
+  margin-top: 20px;
+}
+.sort-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+.sort-table thead tr { background: var(--black); }
+.sort-table thead th {
+  color: var(--white);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 11px 14px;
+  text-align: left;
+  font-weight: 400;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+.sort-table thead th:hover { background: var(--black-soft); }
+.sort-table thead th .sort-icon { margin-left: 4px; opacity: 0.5; font-size: 10px; }
+.sort-table thead th.sorted .sort-icon { opacity: 1; color: var(--gold); }
+.sort-table tbody tr { border-bottom: 1px solid var(--sand-dark); }
+.sort-table tbody tr:hover { background: var(--sand-light); }
+.sort-table tbody tr.row-ugc { }
+.sort-table tbody td {
+  padding: 11px 14px;
+  font-size: 12px;
+  color: var(--gray-dark);
+  vertical-align: middle;
+}
+.sort-table tbody td.account-cell {
+  font-weight: 500;
+  color: var(--black);
+  font-size: 13px;
+}
+.dot-done { color: var(--green); font-size: 14px; }
+.dot-pending { color: var(--red); font-size: 14px; }
+.dot-insight-ok { color: var(--blue); font-size: 12px; }
+.dot-insight-no { color: var(--gray-light); font-size: 12px; }
+.frame-badge-pr {
+  font-size: 10px;
+  background: #f5f0e8;
+  color: var(--gold-muted);
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-weight: 500;
+}
+.frame-badge-ugc {
+  font-size: 10px;
+  background: var(--sand-mid);
+  color: var(--gray-mid);
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+.tier-t1 { color: var(--gold); font-weight: 500; font-size: 11px; }
+.tier-t2 { color: var(--black-soft); font-weight: 500; font-size: 11px; }
+.tier-t3 { color: var(--gray-mid); font-weight: 500; font-size: 11px; }
+.note-cell { color: var(--gray-mid); font-size: 11px; }
+
+/* ===== FOOTER ===== */
+.footer {
+  background: var(--black);
+  padding: 20px 56px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-left {
+  font-size: 11px;
+  color: var(--white);
+  letter-spacing: 0.05em;
+}
+.footer-right {
+  font-size: 11px;
+  color: var(--gray-mid);
+  letter-spacing: 0.05em;
+}
+
+/* ===== PROGRESS BAR ===== */
+.progress-wrap {
+  margin-top: 6px;
+}
+.progress-bar {
+  height: 3px;
+  background: var(--sand-dark);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--gold);
+  border-radius: 2px;
+}
+
+@media print {
+  body { background: white; }
+  .wrapper { max-width: 100%; }
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+<!-- ===== COVER ===== -->
+<div class="cover">
+  <div class="cover-line"></div>
+  <div class="cover-eyebrow">Influencer PR Campaign Report</div>
+  <div class="cover-title">SOFER × USAGI ONLINE</div>
+  <div class="cover-meta">
+    実施期間：<span>2026年6月 〜 2026年7月</span><br>
+    本資料は中間報告となります。インサイトデータ全件回収後に最終版レポートを別途提出いたします。<br>
+    作成日：<span>2026年7月6日</span>
+  </div>
+  <div class="cover-footer">GOOD VIBES AGENCY — 2026.07.06</div>
+</div>
+
+<!-- ===== SECTION 1: エグゼクティブサマリー ===== -->
+<div class="section">
+  <div class="section-label">Section 01</div>
+  <div class="section-title">エグゼクティブサマリー</div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Total Creators</div>
+      <div class="kpi-value">48</div>
+      <div class="kpi-sub">PR枠 16名 + UGC枠 32名</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Posting Rate</div>
+      <div class="kpi-value">87.5%</div>
+      <div class="kpi-sub">42名完了 · 6名対応中</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Est. Reach</div>
+      <div class="kpi-value">1,480,526</div>
+      <div class="kpi-sub">推計総フォロワーリーチ</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Insight Rate</div>
+      <div class="kpi-value">62.5%</div>
+      <div class="kpi-sub">PR枠 10名 / 16名</div>
+    </div>
+  </div>
+
+  <p class="body-text">本キャンペーンは、インフルエンサーPR枠16名・ナノインフルエンサーUGC枠32名の計48名のInstagramクリエイターによる投稿施策として実施しました。現時点（2026年7月6日）で投稿完了率87.5%（42名／48名）を達成しており、特にインフルエンサーPR枠においては全16名が投稿を完了しています。推計総リーチは約148万フォロワーに達しており、SOFER × USAGI ONLINEのブランド認知拡大に向けた広範なリーチを実現しています。</p>
+
+  <p class="body-text">インフルエンサーPR枠では、フォロワー数144,145名を誇るトップクリエイター @tan___gram をはじめ、Tier 1（10万フォロワー超）4名・Tier 2（3〜10万）8名・Tier 3（3万未満）4名という階層構成でキャスティングを実施しました。PR枠16名の合計フォロワー数は約81.9万となり、女性フォロワー比率の平均は76.0%と、SOFERのターゲット層である女性ユーザーへの高いリーチ効率を実現しています。</p>
+
+  <p class="body-text">ナノインフルエンサーUGC枠では32名が参加し、投稿完了率は81.3%（26名／32名）です。フォロワー規模1,000〜14万と幅広いクリエイターが"生活者目線のリアルな投稿"を生成することで、PRコンテンツの多様性と信頼性を高める効果が期待されます。未投稿6名については配送不備・連絡調整中のケースが含まれており、現在順次フォロー対応を進めています。</p>
+
+  <p class="body-text">インサイトデータについては、PR枠10名分の回収が完了しており（回収率62.5%）、残り6名分を現在リマインド中です。インサイト全件回収後、リーチ実数・インプレッション数・エンゲージメント数・保存数・プロフィールアクセス数などの定量データを加えた最終レポートを別途ご提出いたします。</p>
+</div>
+
+<!-- ===== SECTION 2: キャンペーン概要 ===== -->
+<div class="section">
+  <div class="section-label">Section 02</div>
+  <div class="section-title">キャンペーン概要</div>
+
+  <table class="info-table">
+    <tbody>
+      <tr><td>キャンペーン名</td><td>SOFER × USAGI ONLINE インフルエンサーPRキャンペーン</td></tr>
+      <tr><td>実施期間</td><td>2026年6月 〜 2026年7月</td></tr>
+      <tr><td>実施媒体</td><td>Instagram（フィード・ストーリーズ）</td></tr>
+      <tr><td>施策区分</td><td>① インフルエンサーPR枠（16名）　② ナノインフルエンサーUGC枠（32名）</td></tr>
+      <tr><td>総参加クリエイター数</td><td>48名</td></tr>
+      <tr><td>推計総リーチ</td><td>約1,480,526フォロワー</td></tr>
+      <tr><td>キャンペーン目的</td><td>SOFER商品の認知拡大・Instagramプロフィールへのトラフィック誘導</td></tr>
+      <tr><td>二次使用可否</td><td>OK：42名　/ NG：3名　/ 未確認：3名</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== SECTION 3: 全体投稿進捗 ===== -->
+<div class="section">
+  <div class="section-label">Section 03</div>
+  <div class="section-title">全体投稿進捗</div>
+
+  <p class="body-text">キャンペーン全体の投稿完了状況は87.5%（42名／48名）です。インフルエンサーPR枠は100%完了を達成し、アサイン済み全員からの投稿が確認されています。ナノインフルエンサーUGC枠は81.3%（26名／32名）完了となっており、未投稿6名については配送不備・連絡調整・日程変更希望などの個別事情があり、現在対応中です。</p>
+
+  <p class="body-text">特筆すべき点として、未投稿者の中に @rika.kitou（フォロワー数90,659名、ENG率2.99%）が含まれています。この1名の投稿が完了するだけで、UGC枠の推計リーチは約13.7%増加する計算となります。早期完了に向けて優先的にフォローを実施しています。</p>
+
+  <div class="chart-row">
+    <div class="chart-card">
+      <div class="chart-card-title">全体完了率</div>
+      <div class="chart-container">
+        <canvas id="chartOverallRate"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-card-title">枠別完了率</div>
+      <div class="chart-container">
+        <canvas id="chartFrameRate"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <table class="progress-table">
+    <thead>
+      <tr>
+        <th>施策区分</th>
+        <th>参加人数</th>
+        <th>完了</th>
+        <th>未投稿</th>
+        <th>完了率</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>インフルエンサーPR枠</td>
+        <td>16名</td>
+        <td>16名</td>
+        <td>0名</td>
+        <td>100%</td>
+      </tr>
+      <tr>
+        <td>ナノUGC枠</td>
+        <td>32名</td>
+        <td>26名</td>
+        <td>6名</td>
+        <td>81.3%</td>
+      </tr>
+      <tr>
+        <td><strong>合計</strong></td>
+        <td><strong>48名</strong></td>
+        <td><strong>42名</strong></td>
+        <td><strong>6名</strong></td>
+        <td><strong>87.5%</strong></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== SECTION 4: インフルエンサーPR枠 詳細分析 ===== -->
+<div class="section">
+  <div class="section-label">Section 04</div>
+  <div class="section-title">インフルエンサーPR枠 詳細分析</div>
+
+  <!-- 4-1 -->
+  <div class="subsection-title">4-1. Tier構成とキャスティング戦略</div>
+
+  <p class="body-text">インフルエンサーPR枠16名は、フォロワー規模に基づきTier 1〜3に分類されます。Tier 1（10万フォロワー超）4名・Tier 2（3万〜10万）8名・Tier 3（3万未満）4名という構成は、リーチの最大化と費用対効果のバランスを意識した設計です。大型インフルエンサーによる広域リーチと、中小型インフルエンサーによるターゲット密度の高いリーチを組み合わせることで、ブランド認知の裾野を広げながらコアターゲット層への深いアプローチを同時に実現しています。</p>
+
+  <p class="body-text">PR枠16名の合計フォロワー数は818,785名に達します。注目すべきは女性フォロワー比率の高さで、PR枠全体の平均は76.0%です。とりわけ @har_326（91.8%）・@hinap_17（91.9%）・@ai___ri___i（91.9%）は女性フォロワー比率が90%を超えており、女性向けアパレルブランドであるSOFERの訴求において極めて高い効率が期待できます。インフルエンサー選定段階でのターゲット適合性の精度の高さを示しています。</p>
+
+  <p class="body-text">ENG率については、@tan___gram の8.07%が突出しており、Instagram業界平均（1〜3%）の約3〜8倍に相当します。このエンゲージメント率はフォロワーとの強い信頼関係を示しており、投稿が単なるリーチに留まらず、フォロワーの具体的な行動（いいね・コメント・保存・プロフィールアクセス）を促している可能性が高いです。@saeeeoky（2.68%）も業界水準を上回る数値を示しています。なお、ENG率0.00%のアカウントはデータ未取得によるものであり、インサイト回収後に実態が明らかになります。</p>
+
+  <div class="chart-row">
+    <div class="chart-card">
+      <div class="chart-card-title">Tier別構成（PR枠16名）</div>
+      <div class="chart-container">
+        <canvas id="chartTierCompose"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-card-title">PR枠 ENG率（全16名）</div>
+      <div class="chart-container" style="height:240px;">
+        <canvas id="chartEngRate"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4-2 -->
+  <div class="subsection-title">4-2. クリエイター個別パフォーマンス</div>
+
+  <div class="tier-label">TIER 1 — 100,000+ followers</div>
+  <div class="creator-grid" id="tier1-grid"></div>
+
+  <div class="tier-label" style="margin-top:28px;">TIER 2 — 30,000–100,000 followers</div>
+  <div class="creator-grid" id="tier2-grid"></div>
+
+  <div class="tier-label" style="margin-top:28px;">TIER 3 — Under 30,000 followers</div>
+  <div class="creator-grid" id="tier3-grid"></div>
+
+  <!-- 4-3 -->
+  <div class="subsection-title">4-3. キャスティング総評</div>
+
+  <p class="body-text">今回のPR枠キャスティングは、フォロワー規模・ENG率・女性フォロワー比率の3軸において、SOFERの商品PRに高い適合性を持つクリエイター群で構成されています。特に複数のTier 1クリエイターを軸に、幅広いTier 2・Tier 3クリエイターを組み合わせた"階層型キャスティング"は、認知の最大化とターゲット精度の両立を狙った戦略的な設計です。女性フォロワー比率76.0%という高水準は、SOFERが訴求すべき女性層へのリーチ効率を最大化する上で、非常に精度の高い選定が実現できていることを示しています。</p>
+
+  <p class="body-text">また、GOOD VIBES AGENCYが直接マネジメントするタレント（@uruuril・@saeeeoky・@ririka_konishi）もPR枠に参加しており、インサイトデータの回収精度・スケジュール管理・クリエイティブのクオリティコントロールにおいて特に高い信頼性が担保されています。</p>
+</div>
+
+<!-- ===== SECTION 5: ナノインフルエンサーUGC枠 詳細分析 ===== -->
+<div class="section">
+  <div class="section-label">Section 05</div>
+  <div class="section-title">ナノインフルエンサーUGC枠 詳細分析</div>
+
+  <!-- 5-1 -->
+  <div class="subsection-title">5-1. 戦略的位置づけと成果</div>
+
+  <p class="body-text">ナノインフルエンサーUGC枠は、"生活者目線の口コミ投稿"を大量に生成することを目的とした施策です。フォロワー数が比較的小規模であっても、リアルな体験談として投稿されることでPRコンテンツとしての信頼性・説得力が高まる効果があります。また、生成されたコンテンツは二次活用（広告素材・SNS公式アカウント転載など）の観点でも高い価値を持ちます。</p>
+
+  <p class="body-text">UGC枠32名のフォロワー規模を分類すると、5万FW超の"大型"が5名（@ayayuu32：141,885名、@rika.kitou：90,659名、@______meg.s：71,165名、@kanamingram_24：62,505名、@__neinei__：49,082名）、1万〜5万の"中型"が10名、1万未満の"マイクロ・ナノ"が17名です。この分布は、信頼性の高いナノ投稿を多数積み重ねながら、一部大型クリエイターによるリーチ増幅を組み合わせる設計であり、UGCとしての多様性と拡散力を両立しています。</p>
+
+  <p class="body-text">現時点での投稿完了率は81.3%（26名／32名）です。未投稿6名については、配送不備（1名）・連絡不通（3名）・日程調整中（2名）という状況で個別対応を進めています。特に @rika.kitou（FW 90,659名・ENG率2.99%）の投稿完了時にはUGC枠成果が大幅に向上する見込みです。</p>
+
+  <div class="chart-row">
+    <div class="chart-card">
+      <div class="chart-card-title">UGC枠 FW規模別構成</div>
+      <div class="chart-container">
+        <canvas id="chartUGCSize"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-card-title">UGC枠 投稿完了率</div>
+      <div class="chart-container">
+        <canvas id="chartUGCRate"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5-2 -->
+  <div class="subsection-title">5-2. 未投稿クリエイターの状況と対応</div>
+
+  <p class="body-text">未投稿の6名については、それぞれの状況と対応方針を以下にまとめます。連絡不通の3名については複数回のリマインドを実施済みです。@rika.kitou については投稿フォーマット変更の希望（フィード投稿）があり、現在合意形成を進めています。いずれも今週中の解決を目指して対応継続中です。</p>
+
+  <div class="pending-card">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>アカウント</th>
+          <th>フォロワー</th>
+          <th>ENG率</th>
+          <th>状況</th>
+          <th>対応内容</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="account-cell">@krnco__129</td>
+          <td>23,562</td>
+          <td>0.00%</td>
+          <td>素材未共有</td>
+          <td>素材再送・確認中</td>
+        </tr>
+        <tr>
+          <td class="account-cell">@yuur_02</td>
+          <td>3,997</td>
+          <td>0.00%</td>
+          <td>連絡不通・差替対応中</td>
+          <td>商品差替・再確認</td>
+        </tr>
+        <tr>
+          <td class="account-cell">@yume012255</td>
+          <td>10,780</td>
+          <td>35.83%</td>
+          <td>連絡不通・未着報告</td>
+          <td>再送検討中</td>
+        </tr>
+        <tr style="background:#fff8f8;">
+          <td class="account-cell" style="color:var(--red);">@rika.kitou ★最優先</td>
+          <td>90,659</td>
+          <td>2.99%</td>
+          <td>投稿日程調整中</td>
+          <td>フィード投稿で合意形成中</td>
+        </tr>
+        <tr>
+          <td class="account-cell">@mymt.mai</td>
+          <td>16,142</td>
+          <td>0.97%</td>
+          <td>投稿待ち</td>
+          <td>リマインド対応中</td>
+        </tr>
+        <tr>
+          <td class="account-cell">@miyamais</td>
+          <td>34,982</td>
+          <td>0.17%</td>
+          <td>投稿待ち</td>
+          <td>7/3リマインド済</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== SECTION 6: インサイトデータ回収状況 ===== -->
+<div class="section">
+  <div class="section-label">Section 06</div>
+  <div class="section-title">インサイトデータ回収状況</div>
+
+  <!-- 6-1 -->
+  <div class="subsection-title">6-1. 現状</div>
+
+  <p class="body-text">インサイトデータの回収は、PR枠16名中10名が完了しています（回収率62.5%）。インサイトデータとは各投稿のリーチ数・インプレッション数・エンゲージメント数・保存数・プロフィールアクセス数等の実績値であり、キャンペーンの定量的な効果測定に不可欠なデータです。回収完了の10名は @tan___gram・@har_326・@uruuril・@mizuho.04・@hinap_17・@ullmp_・@ririka_konishi・@saeeeoky・@ai___ri___i・@cococolily です。</p>
+
+  <p class="body-text">未回収の6名（@___ponmk2___・@imusuka_・@sayachan24_・@niki.kawabe・@81vly・@momoko_9512）には現在リマインドを実施中です。全件回収完了後、リーチ実数・インプレッション・エンゲージメント数を加えた最終版レポートをご提出いたします。</p>
+
+  <div class="chart-single">
+    <div class="chart-card" style="width:320px;">
+      <div class="chart-card-title">インサイト回収率（PR枠16名）</div>
+      <div class="chart-container">
+        <canvas id="chartInsightRate"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6-2 -->
+  <div class="subsection-title">6-2. インサイト追加予定データ</div>
+
+  <div class="info-banner">
+    本データは現在回収中です。数値確定後に最終版レポートにて更新いたします。
+  </div>
+
+  <div class="insight-table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>アカウント</th>
+          <th>FW数</th>
+          <th>Tier</th>
+          <th>リーチ</th>
+          <th>インプレッション</th>
+          <th>エンゲージメント</th>
+          <th>保存数</th>
+          <th>プロフアクセス</th>
+          <th>フォロー増加</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="account-cell">@___ponmk2___</td><td>100,077</td><td class="tier-t1">Tier 1</td><td style="color:var(--gray-light)">回収中</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><td class="account-cell">@imusuka_</td><td>42,886</td><td class="tier-t2">Tier 2</td><td style="color:var(--gray-light)">回収中</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><td class="account-cell">@sayachan24_</td><td>37,199</td><td class="tier-t2">Tier 2</td><td style="color:var(--gray-light)">回収中</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><td class="account-cell">@niki.kawabe</td><td>31,610</td><td class="tier-t2">Tier 2</td><td style="color:var(--gray-light)">回収中</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><td class="account-cell">@81vly</td><td>25,368</td><td class="tier-t2">Tier 2</td><td style="color:var(--gray-light)">回収中</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><td class="account-cell">@momoko_9512</td><td>21,176</td><td class="tier-t3">Tier 3</td><td style="color:var(--gray-light)">回収中</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== SECTION 7: 総括と今後のアクション ===== -->
+<div class="section">
+  <div class="section-label">Section 07</div>
+  <div class="section-title">総括と今後のアクション</div>
+
+  <p class="body-text">本キャンペーンはインフルエンサーPR枠・ナノUGC枠の二層構造により、①大型インフルエンサーによる認知の最大化、②ナノインフルエンサーによる信頼性の高いUGC生成、という2つの目的を同時に実現する設計で実施しました。PR枠100%完了・全体87.5%完了という現時点の進捗は、スケジュール管理の観点から概ね良好と評価できます。</p>
+
+  <p class="body-text">キャスティングの質という観点では、PR枠の女性フォロワー比率76.0%がSOFERの主要ターゲットである女性層への高い適合性を示しています。単なるフォロワー数だけでなく、オーディエンスの質にも配慮した選定が実施されており、特に複数クリエイターで女性FW比率90%超を達成している点は、ターゲットへの訴求精度が高水準にあることを示しています。</p>
+
+  <p class="body-text">インサイトデータが全件揃った段階では、クリエイターごとのリーチ率（リーチ÷フォロワー数）・保存率・プロフィールアクセス率などの二次指標を算出し、ROIの定量評価が可能になります。これらの指標は次回以降のキャンペーンにおけるクリエイター選定・予算配分の基準データとしても活用できます。</p>
+
+  <table class="action-table">
+    <thead>
+      <tr>
+        <th>優先度</th>
+        <th>アクション内容</th>
+        <th>期限</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="action-row-critical">
+        <td><span class="priority-badge priority-critical">最優先</span></td>
+        <td>@rika.kitou（FW 90,659名）投稿完了確認</td>
+        <td>今週中</td>
+      </tr>
+      <tr class="action-row-critical">
+        <td><span class="priority-badge priority-critical">最優先</span></td>
+        <td>連絡不通3名（@yuur_02 / @yume012255 / @ayayuu32）への対応確認</td>
+        <td>今週中</td>
+      </tr>
+      <tr class="action-row-high">
+        <td><span class="priority-badge priority-high">高優先</span></td>
+        <td>PR枠インサイト未回収6名へのリマインド送付</td>
+        <td>今週中</td>
+      </tr>
+      <tr class="action-row-high">
+        <td><span class="priority-badge priority-high">高優先</span></td>
+        <td>@hazumi_kato 配送再送・投稿完了確認</td>
+        <td>随時</td>
+      </tr>
+      <tr class="action-row-normal">
+        <td><span class="priority-badge priority-normal">通常</span></td>
+        <td>素材未共有クリエイター（@krnco__129 他）への確認</td>
+        <td>今週中</td>
+      </tr>
+      <tr class="action-row-normal">
+        <td><span class="priority-badge priority-normal">通常</span></td>
+        <td>インサイト全件回収後、最終レポート作成・提出</td>
+        <td>回収完了後</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== SECTION 8: 全クリエイター一覧 ===== -->
+<div class="section">
+  <div class="section-label">Section 08</div>
+  <div class="section-title">参考：全クリエイター一覧（48名）</div>
+
+  <div class="sort-table-wrap">
+    <table class="sort-table" id="allCreatorsTable">
+      <thead>
+        <tr>
+          <th data-col="no" data-type="num">No. <span class="sort-icon">↕</span></th>
+          <th data-col="account" data-type="str">アカウント <span class="sort-icon">↕</span></th>
+          <th data-col="frame" data-type="str">枠 <span class="sort-icon">↕</span></th>
+          <th data-col="tier" data-type="str">Tier <span class="sort-icon">↕</span></th>
+          <th data-col="fw" data-type="num">フォロワー数 <span class="sort-icon">↕</span></th>
+          <th data-col="eng" data-type="num">ENG率 <span class="sort-icon">↕</span></th>
+          <th data-col="female" data-type="num">女性FW% <span class="sort-icon">↕</span></th>
+          <th data-col="done" data-type="bool">投稿完了 <span class="sort-icon">↕</span></th>
+          <th data-col="insight" data-type="bool">インサイト <span class="sort-icon">↕</span></th>
+          <th data-col="note" data-type="str">備考 <span class="sort-icon">↕</span></th>
+        </tr>
+      </thead>
+      <tbody id="allCreatorsTbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div class="footer">
+  <div class="footer-left">GOOD VIBES AGENCY — INFLUENCER PR CAMPAIGN REPORT</div>
+  <div class="footer-right">2026.07.06 / CONFIDENTIAL</div>
+</div>
+
+</div><!-- /.wrapper -->
+
+<script>
+// ===== CHART.JS DEFAULTS =====
+Chart.defaults.font.family = '"SF Pro Text", -apple-system, "ヒラギノ角ゴシック Pro", "Hiragino Kaku Gothic Pro", sans-serif';
+Chart.defaults.font.size = 12;
+Chart.defaults.color = '#6c6c70';
+
+// ===== CHART 1: 全体完了率ドーナツ =====
+new Chart(document.getElementById('chartOverallRate'), {
+  type: 'doughnut',
+  data: {
+    labels: ['完了 42名', '未投稿 6名'],
+    datasets: [{
+      data: [42, 6],
+      backgroundColor: ['#c8a96e', '#aeaeb2'],
+      borderWidth: 0,
+      hoverOffset: 4
+    }]
+  },
+  options: {
+    cutout: '72%',
+    plugins: {
+      legend: { position: 'bottom', labels: { padding: 16, font: { size: 12 } } },
+      tooltip: { callbacks: { label: ctx => ` ${ctx.label}` } }
+    },
+    animation: { animateRotate: true }
+  },
+  plugins: [{
+    id: 'centerText',
+    afterDraw(chart) {
+      const { ctx, chartArea: { left, top, right, bottom } } = chart;
+      const cx = (left + right) / 2, cy = (top + bottom) / 2;
+      ctx.save();
+      ctx.font = 'bold 26px "SF Pro Display", -apple-system, sans-serif';
+      ctx.fillStyle = '#0a0a0a';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('87.5%', cx, cy);
+      ctx.restore();
+    }
+  }]
+});
+
+// ===== CHART 2: 枠別完了率横棒 =====
+new Chart(document.getElementById('chartFrameRate'), {
+  type: 'bar',
+  data: {
+    labels: ['PR枠', 'UGC枠'],
+    datasets: [{
+      label: '完了率',
+      data: [100, 81.3],
+      backgroundColor: ['#c8a96e', '#1c1c1e'],
+      borderRadius: 4,
+      barThickness: 32
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    scales: {
+      x: {
+        min: 0, max: 105,
+        ticks: { callback: v => v + '%', stepSize: 25 },
+        grid: { color: '#edeae3' }
+      },
+      y: { grid: { display: false } }
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ` ${ctx.raw}%` } }
+    }
+  }
+});
+
+// ===== CHART 3: Tier構成ドーナツ =====
+new Chart(document.getElementById('chartTierCompose'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Tier 1 (4名)', 'Tier 2 (8名)', 'Tier 3 (4名)'],
+    datasets: [{
+      data: [4, 8, 4],
+      backgroundColor: ['#c8a96e', '#1c1c1e', '#aeaeb2'],
+      borderWidth: 0,
+      hoverOffset: 4
+    }]
+  },
+  options: {
+    cutout: '65%',
+    plugins: {
+      legend: { position: 'bottom', labels: { padding: 14, font: { size: 11 } } }
+    }
+  }
+});
+
+// ===== CHART 4: PR枠ENG率横棒 =====
+const prData = [
+  { name: '@tan___gram', eng: 8.07 },
+  { name: '@saeeeoky', eng: 2.68 },
+  { name: '@ai___ri___i', eng: 1.23 },
+  { name: '@___ponmk2___', eng: 1.32 },
+  { name: '@uruuril', eng: 1.10 },
+  { name: '@sayachan24_', eng: 1.03 },
+  { name: '@momoko_9512', eng: 0.95 },
+  { name: '@niki.kawabe', eng: 0.87 },
+  { name: '@imusuka_', eng: 0.54 },
+  { name: '@mizuho.04', eng: 0.26 },
+  { name: '@hinap_17', eng: 0.16 },
+  { name: '@har_326', eng: 0.00 },
+  { name: '@ullmp_', eng: 0.00 },
+  { name: '@81vly', eng: 0.00 },
+  { name: '@ririka_konishi', eng: 0.00 },
+  { name: '@cococolily', eng: 0.00 }
+];
+new Chart(document.getElementById('chartEngRate'), {
+  type: 'bar',
+  data: {
+    labels: prData.map(d => d.name),
+    datasets: [{
+      label: 'ENG率',
+      data: prData.map(d => d.eng),
+      backgroundColor: prData.map(d => d.eng >= 2 ? '#c8a96e' : '#1c1c1e'),
+      borderRadius: 3,
+      barThickness: 12
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    scales: {
+      x: {
+        min: 0,
+        ticks: { callback: v => v + '%' },
+        grid: { color: '#edeae3' }
+      },
+      y: { grid: { display: false }, ticks: { font: { size: 10 } } }
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ` ENG率 ${ctx.raw}%` } },
+      annotation: {}
+    }
+  },
+  plugins: [{
+    id: 'avgLine',
+    afterDraw(chart) {
+      const { ctx, scales: { x, y } } = chart;
+      const avg = 1.17;
+      const xPos = x.getPixelForValue(avg);
+      ctx.save();
+      ctx.beginPath();
+      ctx.setLineDash([4, 4]);
+      ctx.strokeStyle = '#c8a96e';
+      ctx.lineWidth = 1.5;
+      ctx.moveTo(xPos, y.top);
+      ctx.lineTo(xPos, y.bottom);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.font = '10px "SF Pro Text", sans-serif';
+      ctx.fillStyle = '#c8a96e';
+      ctx.textAlign = 'left';
+      ctx.fillText('平均 1.17%', xPos + 4, y.top + 12);
+      ctx.restore();
+    }
+  }]
+});
+
+// ===== CHART 5: UGC枠FW規模ドーナツ =====
+new Chart(document.getElementById('chartUGCSize'), {
+  type: 'doughnut',
+  data: {
+    labels: ['5万超 (5名)', '1〜5万 (10名)', '1万未満 (17名)'],
+    datasets: [{
+      data: [5, 10, 17],
+      backgroundColor: ['#c8a96e', '#1c1c1e', '#aeaeb2'],
+      borderWidth: 0,
+      hoverOffset: 4
+    }]
+  },
+  options: {
+    cutout: '65%',
+    plugins: {
+      legend: { position: 'bottom', labels: { padding: 14, font: { size: 11 } } }
+    }
+  }
+});
+
+// ===== CHART 6: UGC枠完了率ドーナツ =====
+new Chart(document.getElementById('chartUGCRate'), {
+  type: 'doughnut',
+  data: {
+    labels: ['完了 26名', '未投稿 6名'],
+    datasets: [{
+      data: [26, 6],
+      backgroundColor: ['#c8a96e', '#aeaeb2'],
+      borderWidth: 0,
+      hoverOffset: 4
+    }]
+  },
+  options: {
+    cutout: '72%',
+    plugins: {
+      legend: { position: 'bottom', labels: { padding: 16, font: { size: 12 } } }
+    }
+  },
+  plugins: [{
+    id: 'centerTextUGC',
+    afterDraw(chart) {
+      const { ctx, chartArea: { left, top, right, bottom } } = chart;
+      const cx = (left + right) / 2, cy = (top + bottom) / 2;
+      ctx.save();
+      ctx.font = 'bold 26px "SF Pro Display", -apple-system, sans-serif';
+      ctx.fillStyle = '#0a0a0a';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('81.3%', cx, cy);
+      ctx.restore();
+    }
+  }]
+});
+
+// ===== CHART 7: インサイト回収率ドーナツ =====
+new Chart(document.getElementById('chartInsightRate'), {
+  type: 'doughnut',
+  data: {
+    labels: ['回収済み 10名', '未回収 6名'],
+    datasets: [{
+      data: [10, 6],
+      backgroundColor: ['#c8a96e', '#aeaeb2'],
+      borderWidth: 0,
+      hoverOffset: 4
+    }]
+  },
+  options: {
+    cutout: '72%',
+    plugins: {
+      legend: { position: 'bottom', labels: { padding: 16, font: { size: 12 } } }
+    }
+  },
+  plugins: [{
+    id: 'centerTextInsight',
+    afterDraw(chart) {
+      const { ctx, chartArea: { left, top, right, bottom } } = chart;
+      const cx = (left + right) / 2, cy = (top + bottom) / 2;
+      ctx.save();
+      ctx.font = 'bold 26px "SF Pro Display", -apple-system, sans-serif';
+      ctx.fillStyle = '#0a0a0a';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('62.5%', cx, cy);
+      ctx.restore();
+    }
+  }]
+});
+
+// ===== INFLUENCER CARDS =====
+const tier1Data = [
+  { account: 'tan___gram', fw: 144145, eng: 8.07, female: 88.9, insight: true, done: true, gva: false },
+  { account: '___ponmk2___', fw: 100077, eng: 1.32, female: 85.5, insight: false, done: true, gva: false },
+  { account: 'har_326', fw: 96703, eng: 0.00, female: 91.8, insight: true, done: true, gva: false },
+  { account: 'uruuril', fw: 74076, eng: 1.10, female: 54.6, insight: true, done: true, gva: true }
+];
+const tier2Data = [
+  { account: 'hinap_17', fw: 60672, eng: 0.16, female: 91.9, insight: true, done: true, gva: false },
+  { account: 'ullmp_', fw: 59016, eng: 0.00, female: 73.8, insight: true, done: true, gva: false },
+  { account: 'imusuka_', fw: 42886, eng: 0.54, female: 66.3, insight: false, done: true, gva: false },
+  { account: 'sayachan24_', fw: 37199, eng: 1.03, female: 55.4, insight: false, done: true, gva: false },
+  { account: 'niki.kawabe', fw: 31610, eng: 0.87, female: 63.8, insight: false, done: true, gva: false },
+  { account: 'saeeeoky', fw: 30637, eng: 2.68, female: 54.4, insight: true, done: true, gva: true },
+  { account: '81vly', fw: 25368, eng: 0.00, female: 85.3, insight: false, done: true, gva: false },
+  { account: 'cococolily', fw: 18867, eng: 0.00, female: 86.5, insight: true, done: true, gva: false }
+];
+const tier3Data = [
+  { account: 'mizuho.04', fw: 67245, eng: 0.26, female: 64.4, insight: true, done: true, gva: false },
+  { account: 'ririka_konishi', fw: 37799, eng: 0.00, female: 74.3, insight: true, done: true, gva: true },
+  { account: 'ai___ri___i', fw: 30408, eng: 1.23, female: 91.9, insight: true, done: true, gva: false },
+  { account: 'momoko_9512', fw: 21176, eng: 0.95, female: 64.1, insight: false, done: true, gva: false }
+];
+
+function fmtFw(n) {
+  return n >= 10000 ? (n / 10000).toFixed(1) + '万' : n.toLocaleString();
+}
+
+function buildCard(d, tierClass, tierLabel) {
+  const insightBadge = d.insight
+    ? '<span class="badge badge-insight-ok">INSIGHT ✓</span>'
+    : '<span class="badge badge-insight-pending">INSIGHT PENDING</span>';
+  const gvaBadge = d.gva ? '<span class="badge badge-gva">GVA TALENT</span>' : '';
+  return `
+    <div class="creator-card ${tierClass}">
+      <div class="creator-name">@${d.account}</div>
+      <div class="badge-row">
+        <span class="badge badge-tier">${tierLabel}</span>
+        ${insightBadge}
+        ${gvaBadge}
+      </div>
+      <div class="creator-metrics">
+        <div class="metric-item">
+          <div class="metric-label">Followers</div>
+          <div class="metric-value">${fmtFw(d.fw)}</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-label">ENG Rate</div>
+          <div class="metric-value">${d.eng.toFixed(2)}%</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-label">Female FW</div>
+          <div class="metric-value">${d.female}%</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+document.getElementById('tier1-grid').innerHTML = tier1Data.map(d => buildCard(d, 'tier1', 'TIER 1')).join('');
+document.getElementById('tier2-grid').innerHTML = tier2Data.map(d => buildCard(d, 'tier2', 'TIER 2')).join('');
+document.getElementById('tier3-grid').innerHTML = tier3Data.map(d => buildCard(d, 'tier3', 'TIER 3')).join('');
+
+// ===== ALL CREATORS SORTABLE TABLE =====
+const allCreators = [
+  {no:1,  account:'tan___gram',      frame:'PR',  tier:'TIER 1', fw:144145, eng:8.07,  female:88.9, done:true,  insight:true,  note:''},
+  {no:2,  account:'___ponmk2___',   frame:'PR',  tier:'TIER 1', fw:100077, eng:1.32,  female:85.5, done:true,  insight:false, note:''},
+  {no:3,  account:'har_326',         frame:'PR',  tier:'TIER 1', fw:96703,  eng:0.00,  female:91.8, done:true,  insight:true,  note:''},
+  {no:4,  account:'uruuril',         frame:'PR',  tier:'TIER 1', fw:74076,  eng:1.10,  female:54.6, done:true,  insight:true,  note:'GVA TALENT'},
+  {no:5,  account:'mizuho.04',       frame:'PR',  tier:'TIER 3', fw:67245,  eng:0.26,  female:64.4, done:true,  insight:true,  note:''},
+  {no:6,  account:'hinap_17',        frame:'PR',  tier:'TIER 2', fw:60672,  eng:0.16,  female:91.9, done:true,  insight:true,  note:''},
+  {no:7,  account:'ullmp_',          frame:'PR',  tier:'TIER 2', fw:59016,  eng:0.00,  female:73.8, done:true,  insight:true,  note:''},
+  {no:8,  account:'imusuka_',        frame:'PR',  tier:'TIER 2', fw:42886,  eng:0.54,  female:66.3, done:true,  insight:false, note:''},
+  {no:9,  account:'ririka_konishi',  frame:'PR',  tier:'TIER 3', fw:37799,  eng:0.00,  female:74.3, done:true,  insight:true,  note:'GVA TALENT'},
+  {no:10, account:'sayachan24_',     frame:'PR',  tier:'TIER 2', fw:37199,  eng:1.03,  female:55.4, done:true,  insight:false, note:''},
+  {no:11, account:'niki.kawabe',     frame:'PR',  tier:'TIER 2', fw:31610,  eng:0.87,  female:63.8, done:true,  insight:false, note:''},
+  {no:12, account:'saeeeoky',        frame:'PR',  tier:'TIER 2', fw:30637,  eng:2.68,  female:54.4, done:true,  insight:true,  note:'GVA TALENT'},
+  {no:13, account:'ai___ri___i',     frame:'PR',  tier:'TIER 3', fw:30408,  eng:1.23,  female:91.9, done:true,  insight:true,  note:''},
+  {no:14, account:'81vly',           frame:'PR',  tier:'TIER 2', fw:25368,  eng:0.00,  female:85.3, done:true,  insight:false, note:''},
+  {no:15, account:'momoko_9512',     frame:'PR',  tier:'TIER 3', fw:21176,  eng:0.95,  female:64.1, done:true,  insight:false, note:''},
+  {no:16, account:'cococolily',      frame:'PR',  tier:'TIER 2', fw:18867,  eng:0.00,  female:86.5, done:true,  insight:true,  note:''},
+  {no:46, account:'______meg.s',     frame:'UGC', tier:'—',      fw:71165,  eng:0.00,  female:null, done:true,  insight:false, note:''},
+  {no:47, account:'_o031.k',         frame:'UGC', tier:'—',      fw:4532,   eng:0.00,  female:null, done:true,  insight:false, note:'7.2リマインド済'},
+  {no:48, account:'krnco__129',      frame:'UGC', tier:'—',      fw:23562,  eng:0.00,  female:null, done:false, insight:false, note:'素材未共有'},
+  {no:49, account:'imochaaaan',      frame:'UGC', tier:'—',      fw:26522,  eng:0.00,  female:null, done:true,  insight:false, note:''},
+  {no:50, account:'__neinei__',      frame:'UGC', tier:'—',      fw:49082,  eng:0.00,  female:null, done:true,  insight:false, note:''},
+  {no:51, account:'kanamingram_24',  frame:'UGC', tier:'—',      fw:62505,  eng:3.58,  female:null, done:true,  insight:false, note:''},
+  {no:52, account:'rabbit.ryn__',    frame:'UGC', tier:'—',      fw:32283,  eng:0.00,  female:null, done:true,  insight:false, note:''},
+  {no:53, account:'riho______nio',   frame:'UGC', tier:'—',      fw:29617,  eng:0.00,  female:null, done:true,  insight:false, note:''},
+  {no:54, account:'ayana____12.24',  frame:'UGC', tier:'—',      fw:34937,  eng:0.77,  female:null, done:true,  insight:false, note:''},
+  {no:55, account:'risako_goto',     frame:'UGC', tier:'—',      fw:23349,  eng:0.92,  female:null, done:true,  insight:false, note:''},
+  {no:56, account:'ai__susan',       frame:'UGC', tier:'—',      fw:22402,  eng:0.83,  female:null, done:true,  insight:false, note:''},
+  {no:58, account:'yui____721',      frame:'UGC', tier:'—',      fw:20116,  eng:1.35,  female:null, done:true,  insight:false, note:''},
+  {no:59, account:'___mocahome___',  frame:'UGC', tier:'—',      fw:11068,  eng:0.00,  female:null, done:true,  insight:false, note:''},
+  {no:60, account:'ayayuu32',        frame:'UGC', tier:'—',      fw:141885, eng:0.42,  female:null, done:true,  insight:false, note:'連絡不通（投稿確認済）'},
+  {no:61, account:'___y__u99',       frame:'UGC', tier:'—',      fw:3716,   eng:0.00,  female:null, done:true,  insight:false, note:''},
+  {no:62, account:'_rlane_cafegm',   frame:'UGC', tier:'—',      fw:14021,  eng:2.13,  female:null, done:true,  insight:false, note:''},
+  {no:63, account:'__yu.ua',         frame:'UGC', tier:'—',      fw:6045,   eng:0.00,  female:null, done:true,  insight:false, note:''},
+  {no:64, account:'yuur_02',         frame:'UGC', tier:'—',      fw:3997,   eng:0.00,  female:null, done:false, insight:false, note:'商品差替対応中'},
+  {no:65, account:'nana_86t',        frame:'UGC', tier:'—',      fw:3579,   eng:0.00,  female:null, done:true,  insight:false, note:''},
+  {no:66, account:'yume012255',      frame:'UGC', tier:'—',      fw:10780,  eng:35.83, female:null, done:false, insight:false, note:'連絡不通・未着報告'},
+  {no:67, account:'rika.kitou',      frame:'UGC', tier:'—',      fw:90659,  eng:2.99,  female:null, done:false, insight:false, note:'★最優先 フィード投稿調整中'},
+  {no:68, account:'pyon__0828',      frame:'UGC', tier:'—',      fw:3050,   eng:0.00,  female:null, done:true,  insight:false, note:''},
+  {no:69, account:'__mild.20',       frame:'UGC', tier:'—',      fw:4416,   eng:0.00,  female:null, done:true,  insight:false, note:'7.2リマインド済'},
+  {no:70, account:'miyako.kurumi',   frame:'UGC', tier:'—',      fw:3957,   eng:0.00,  female:null, done:true,  insight:false, note:''},
+  {no:71, account:'mymt.mai',        frame:'UGC', tier:'—',      fw:16142,  eng:0.97,  female:null, done:false, insight:false, note:'投稿待ち'},
+  {no:72, account:'miyamais',        frame:'UGC', tier:'—',      fw:34982,  eng:0.17,  female:null, done:false, insight:false, note:'7/3リマインド済'},
+  {no:73, account:'toitopoooo____',  frame:'UGC', tier:'—',      fw:5450,   eng:0.40,  female:null, done:true,  insight:false, note:''},
+  {no:74, account:'sei',             frame:'UGC', tier:'—',      fw:3125,   eng:9.63,  female:null, done:true,  insight:false, note:''},
+  {no:75, account:'hazumi_kato',     frame:'UGC', tier:'—',      fw:14041,  eng:0.13,  female:null, done:false, insight:false, note:'配送不備・再送中'},
+  {no:76, account:'m_0806u',         frame:'UGC', tier:'—',      fw:8230,   eng:5.22,  female:null, done:false, insight:false, note:'対応中'},
+  {no:77, account:'hyinako',         frame:'UGC', tier:'—',      fw:3723,   eng:7.20,  female:null, done:true,  insight:false, note:''},
+  {no:78, account:'miduki__10',      frame:'UGC', tier:'—',      fw:1554,   eng:7.01,  female:null, done:true,  insight:false, note:''},
+];
+
+let sortCol = 'no', sortDir = 1;
+
+function renderTable(data) {
+  const tbody = document.getElementById('allCreatorsTbody');
+  tbody.innerHTML = data.map(d => {
+    const frameBadge = d.frame === 'PR'
+      ? '<span class="frame-badge-pr">PR</span>'
+      : '<span class="frame-badge-ugc">UGC</span>';
+    const tierLabel = d.tier === 'TIER 1' ? `<span class="tier-t1">TIER 1</span>`
+      : d.tier === 'TIER 2' ? `<span class="tier-t2">TIER 2</span>`
+      : d.tier === 'TIER 3' ? `<span class="tier-t3">TIER 3</span>`
+      : '<span style="color:var(--gray-light)">—</span>';
+    const doneDot = d.done
+      ? '<span class="dot-done">●</span>'
+      : '<span class="dot-pending">●</span>';
+    const insightDot = d.insight
+      ? '<span class="dot-insight-ok">●</span>'
+      : '<span class="dot-insight-no">○</span>';
+    return `<tr>
+      <td>${d.no}</td>
+      <td class="account-cell">@${d.account}</td>
+      <td>${frameBadge}</td>
+      <td>${tierLabel}</td>
+      <td>${d.fw.toLocaleString()}</td>
+      <td>${d.eng.toFixed(2)}%</td>
+      <td>${d.female !== null ? d.female + '%' : '<span style="color:var(--gray-light)">—</span>'}</td>
+      <td style="text-align:center">${doneDot}</td>
+      <td style="text-align:center">${insightDot}</td>
+      <td class="note-cell">${d.note}</td>
+    </tr>`;
+  }).join('');
+}
+
+function sortData(col, type) {
+  if (sortCol === col) { sortDir *= -1; }
+  else { sortCol = col; sortDir = 1; }
+  allCreators.sort((a, b) => {
+    let va = a[col], vb = b[col];
+    if (type === 'num') { va = va ?? -1; vb = vb ?? -1; }
+    if (type === 'bool') { va = va ? 1 : 0; vb = vb ? 1 : 0; }
+    if (type === 'str') { va = va ?? ''; vb = vb ?? ''; return sortDir * va.localeCompare(vb); }
+    return sortDir * (va - vb);
+  });
+  renderTable(allCreators);
+  // update header icons
+  document.querySelectorAll('#allCreatorsTable thead th').forEach(th => {
+    th.classList.remove('sorted');
+    const icon = th.querySelector('.sort-icon');
+    if (icon) icon.textContent = '↕';
+  });
+  const activeEl = document.querySelector(`#allCreatorsTable thead th[data-col="${col}"]`);
+  if (activeEl) {
+    activeEl.classList.add('sorted');
+    const icon = activeEl.querySelector('.sort-icon');
+    if (icon) icon.textContent = sortDir === 1 ? '↓' : '↑';
+  }
+}
+
+document.querySelectorAll('#allCreatorsTable thead th[data-col]').forEach(th => {
+  th.addEventListener('click', () => sortData(th.dataset.col, th.dataset.type));
+});
+
+renderTable(allCreators);
+</script>
+</body>
+</html>
