@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>インフルエンサーPRキャンペーン レポート</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&family=Noto+Sans+JP:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg2: #111118;
+      --bg3: #1a1a24;
+      --bg4: #22222f;
+      --border: rgba(255,255,255,0.08);
+      --text: #e8e8f0;
+      --text2: #9090a8;
+      --accent: #c8f261;
+      --red: #ff6b6b;
+      --teal: #4ecdc4;
+      --purple: #a78bfa;
+      --orange: #fb923c;
+      --tier1: #c8f261;
+      --tier2: #4ecdc4;
+      --tier3: #a78bfa;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', 'Noto Sans JP', sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      background: linear-gradient(135deg, #0d0d18 0%, #151525 50%, #0a0a0f 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 40px 40px 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(200,242,97,0.12) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; left: 20%;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(78,205,196,0.08) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .header-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .header-badge {
+      background: var(--accent);
+      color: #0a0a0f;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+    .header-date {
+      color: var(--text2);
+      font-size: 12px;
+      letter-spacing: 0.05em;
+    }
+    header h1 {
+      font-size: clamp(24px, 4vw, 40px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+    header h1 span { color: var(--accent); }
+    .header-sub {
+      color: var(--text2);
+      font-size: 14px;
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .header-sub span { display: flex; align-items: center; gap: 6px; }
+    .header-sub span::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: inline-block; }
+
+    /* ─── MAIN ─── */
+    main { max-width: 1280px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    /* ─── SECTION ─── */
+    .section { margin-bottom: 56px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-num {
+      width: 28px; height: 28px;
+      background: var(--accent);
+      color: #0a0a0f;
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .section-desc {
+      font-size: 12px;
+      color: var(--text2);
+      margin-left: auto;
+    }
+
+    /* ─── KPI CARDS ─── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+    .kpi-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px 20px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .kpi-card:hover { border-color: rgba(200,242,97,0.3); transform: translateY(-2px); }
+    .kpi-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .kpi-card.green::after { background: var(--accent); }
+    .kpi-card.teal::after { background: var(--teal); }
+    .kpi-card.red::after { background: var(--red); }
+    .kpi-card.purple::after { background: var(--purple); }
+    .kpi-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text2);
+      margin-bottom: 10px;
+    }
+    .kpi-value {
+      font-size: clamp(28px, 3vw, 40px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .kpi-card.green .kpi-value { color: var(--accent); }
+    .kpi-card.teal .kpi-value { color: var(--teal); }
+    .kpi-card.red .kpi-value { color: var(--red); }
+    .kpi-card.purple .kpi-value { color: var(--purple); }
+    .kpi-sub {
+      font-size: 12px;
+      color: var(--text2);
+    }
+    .kpi-icon {
+      position: absolute;
+      top: 20px; right: 20px;
+      font-size: 28px;
+      opacity: 0.15;
+    }
+
+    /* ─── GRID 2/3 ─── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+    @media (max-width: 900px) { .grid-3 { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 600px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+    /* ─── CARD ─── */
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      transition: border-color 0.2s;
+    }
+    .card:hover { border-color: rgba(200,242,97,0.2); }
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--text2);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-title::before {
+      content: '';
+      width: 4px; height: 14px;
+      background: var(--accent);
+      border-radius: 2px;
+      display: inline-block;
+    }
+    .chart-wrap {
+      position: relative;
+      width: 100%;
+    }
+    .chart-wrap canvas { display: block; }
+
+    /* ─── DONUT CENTER ─── */
+    .donut-wrap {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .donut-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -55%);
+      text-align: center;
+      pointer-events: none;
+    }
+    .donut-center .big { font-size: 26px; font-weight: 700; line-height: 1; }
+    .donut-center .small { font-size: 10px; color: var(--text2); }
+
+    /* ─── PROGRESS BAR ─── */
+    .progress-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .progress-label {
+      width: 130px;
+      font-size: 12px;
+      color: var(--text2);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex-shrink: 0;
+    }
+    .progress-track {
+      flex: 1;
+      height: 6px;
+      background: var(--bg4);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: var(--accent);
+      transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+    }
+    .progress-val {
+      width: 48px;
+      text-align: right;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      flex-shrink: 0;
+    }
+
+    /* ─── TABLE ─── */
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    thead tr {
+      background: var(--bg3);
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      padding: 12px 14px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text2);
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+    th:hover { color: var(--accent); }
+    th.sort-asc::after { content: ' ↑'; color: var(--accent); }
+    th.sort-desc::after { content: ' ↓'; color: var(--accent); }
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(200,242,97,0.04); }
+    td {
+      padding: 10px 14px;
+      color: var(--text);
+    }
+    .account-link { color: var(--accent); font-weight: 600; font-family: 'DM Sans', monospace; }
+
+    /* ─── BADGES ─── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .badge-tier1 { background: rgba(200,242,97,0.15); color: var(--tier1); border: 1px solid rgba(200,242,97,0.3); }
+    .badge-tier2 { background: rgba(78,205,196,0.15); color: var(--tier2); border: 1px solid rgba(78,205,196,0.3); }
+    .badge-tier3 { background: rgba(167,139,250,0.15); color: var(--tier3); border: 1px solid rgba(167,139,250,0.3); }
+    .badge-ok { background: rgba(200,242,97,0.12); color: var(--accent); border: 1px solid rgba(200,242,97,0.25); }
+    .badge-ng { background: rgba(255,107,107,0.12); color: var(--red); border: 1px solid rgba(255,107,107,0.25); }
+    .badge-done { background: rgba(78,205,196,0.12); color: var(--teal); border: 1px solid rgba(78,205,196,0.25); }
+    .badge-miss { background: rgba(251,146,60,0.12); color: var(--orange); border: 1px solid rgba(251,146,60,0.25); }
+
+    /* ─── STAT PILL ─── */
+    .stat-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+    .stat-pill {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+      min-width: 100px;
+    }
+    .stat-pill .num { font-size: 22px; font-weight: 700; color: var(--accent); }
+    .stat-pill .lbl { font-size: 11px; color: var(--text2); }
+
+    /* ─── ACTION CARD ─── */
+    .action-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+    .action-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      position: relative;
+      padding-left: 20px;
+    }
+    .action-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 16px; bottom: 16px;
+      width: 3px;
+      border-radius: 0 3px 3px 0;
+    }
+    .action-card.warn::before { background: var(--orange); }
+    .action-card.err::before { background: var(--red); }
+    .action-card.info::before { background: var(--teal); }
+    .action-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+    .action-card.warn h4 { color: var(--orange); }
+    .action-card.err h4 { color: var(--red); }
+    .action-card.info h4 { color: var(--teal); }
+    .action-card ul { padding-left: 16px; }
+    .action-card ul li { font-size: 12px; color: var(--text2); margin-bottom: 4px; }
+    .action-card ul li span { color: var(--text); }
+
+    /* ─── CALLOUT ─── */
+    .callout {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .callout-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+    .callout-body h5 { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+    .callout-body p { font-size: 12px; color: var(--text2); }
+    .callout-body strong { color: var(--text); }
+
+    /* ─── BANNER ─── */
+    .banner {
+      background: linear-gradient(135deg, rgba(200,242,97,0.12) 0%, rgba(78,205,196,0.08) 100%);
+      border: 1px solid rgba(200,242,97,0.25);
+      border-radius: 14px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .banner-icon { font-size: 28px; flex-shrink: 0; }
+    .banner-text h4 { font-size: 14px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+    .banner-text p { font-size: 12px; color: var(--text2); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      padding: 24px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text2);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    footer strong { color: var(--accent); }
+
+    /* ─── ENG DOT ─── */
+    .eng-dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      margin-right: 4px;
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg2); }
+    ::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text2); }
+
+    /* ─── UGCSTATUS ─── */
+    .ugc-legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text2); }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+    @media (max-width: 768px) {
+      header { padding: 24px 20px 20px; }
+      main { padding: 24px 16px 60px; }
+      footer { padding: 20px; }
+      .kpi-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .kpi-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── HEADER ─── -->
+<header>
+  <div class="header-meta">
+    <span class="header-badge">Campaign Report</span>
+    <span class="header-date">2026年7月6日 作成</span>
+  </div>
+  <h1>インフルエンサー<span>PR</span>キャンペーン<br>パフォーマンスレポート</h1>
+  <div class="header-sub">
+    <span>期間: 2026年6月–7月</span>
+    <span>総インフルエンサー: 48名</span>
+    <span>PR枠 16名 + UGC枠 32名</span>
+    <span>Prepared by GVA BOT</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- ─── KPI CARDS ─── -->
+  <div class="kpi-grid">
+    <div class="kpi-card green">
+      <div class="kpi-label">総インフルエンサー数</div>
+      <div class="kpi-value">48</div>
+      <div class="kpi-sub">PR枠 16名 + UGC枠 32名</div>
+      <div class="kpi-icon">👥</div>
+    </div>
+    <div class="kpi-card teal">
+      <div class="kpi-label">投稿完了率</div>
+      <div class="kpi-value">87.5%</div>
+      <div class="kpi-sub">42 / 48名完了</div>
+      <div class="kpi-icon">✅</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-label">推計総リーチ</div>
+      <div class="kpi-value">1.48M</div>
+      <div class="kpi-sub">1,480,526 フォロワー</div>
+      <div class="kpi-icon">📡</div>
+    </div>
+    <div class="kpi-card purple">
+      <div class="kpi-label">インサイト回収率</div>
+      <div class="kpi-value">62.5%</div>
+      <div class="kpi-sub">PR枠: 10 / 16名回収済み</div>
+      <div class="kpi-icon">📊</div>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 1: 全体完了率 ─── -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-title">全体投稿状況</div>
+      <div class="section-desc">全48名 / PR枠+UGC枠</div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">全体投稿完了率</div>
+        <div class="donut-wrap">
+          <div class="chart-wrap" style="max-width:260px;max-height:260px;margin:0 auto;">
+            <canvas id="chartDoneAll"></canvas>
+          </div>
+          <div class="donut-center" style="position:static;transform:none;text-align:center;margin-top:12px;">
+            <div style="font-size:13px;color:var(--text2);">完了 <strong style="color:var(--accent)">42名</strong> / 未完了 <strong style="color:var(--red)">6名</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">枠別推計リーチ比較</div>
+        <div class="chart-wrap" style="max-height:260px;">
+          <canvas id="chartReach"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;" class="grid-2">
+      <div class="card">
+        <div class="card-title">PR枠完了率</div>
+        <div class="stat-row">
+          <div class="stat-pill">
+            <span class="num">100%</span>
+            <span class="lbl">完了率</span>
+          </div>
+          <div class="stat-pill">
+            <span class="num" style="color:var(--teal)">16 / 16</span>
+            <span class="lbl">完了 / 総数</span>
+          </div>
+        </div>
+        <div class="progress-row" style="margin-top:8px;">
+          <div class="progress-label">PR枠</div>
+          <div class="progress-track"><div class="progress-fill" style="width:100%;background:var(--accent);"></div></div>
+          <div class="progress-val" style="color:var(--accent)">100%</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">UGC枠完了率</div>
+        <div class="stat-row">
+          <div class="stat-pill">
+            <span class="num" style="color:var(--orange)">81.3%</span>
+            <span class="lbl">完了率</span>
+          </div>
+          <div class="stat-pill">
+            <span class="num" style="color:var(--teal)">26 / 32</span>
+            <span class="lbl">完了 / 総数</span>
+          </div>
+        </div>
+        <div class="progress-row" style="margin-top:8px;">
+          <div class="progress-label">UGC枠</div>
+          <div class="progress-track"><div class="progress-fill" style="width:81.3%;background:var(--orange);"></div></div>
+          <div class="progress-val" style="color:var(--orange)">81.3%</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SECTION 2: PR枠 ─── -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div class="section-title">インフルエンサーPR枠（16名）</div>
+      <div class="section-desc">全員投稿完了 ✅</div>
+    </div>
+
+    <!-- Tier badges summary -->
+    <div class="stat-row" style="margin-bottom:24px;">
+      <div class="stat-pill">
+        <span class="num" style="color:var(--tier1)">4名</span>
+        <span class="lbl">Tier 1 (100k+)</span>
+      </div>
+      <div class="stat-pill">
+        <span class="num" style="color:var(--tier2)">8名</span>
+        <span class="lbl">Tier 2 (30k–100k)</span>
+      </div>
+      <div class="stat-pill">
+        <span class="num" style="color:var(--tier3)">4名</span>
+        <span class="lbl">Tier 3 (~30k)</span>
+      </div>
+      <div class="stat-pill">
+        <span class="num" style="color:var(--accent)">818,785</span>
+        <span class="lbl">推計リーチ FW数合計</span>
+      </div>
+    </div>
+
+    <!-- PR Table -->
+    <div class="table-wrap" style="margin-bottom:24px;">
+      <table id="prTable">
+        <thead>
+          <tr>
+            <th onclick="sortTable('prTable',0)">アカウント</th>
+            <th onclick="sortTable('prTable',1)">Tier</th>
+            <th onclick="sortTable('prTable',2)">FW数</th>
+            <th onclick="sortTable('prTable',3)">ENG率</th>
+            <th onclick="sortTable('prTable',4)">女性FW%</th>
+            <th onclick="sortTable('prTable',5)">インサイト</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="account-link">@tan___gram</td>
+            <td><span class="badge badge-tier1">Tier 1</span></td>
+            <td data-val="144145">144,145</td>
+            <td data-val="8.07"><span class="eng-dot" style="background:#c8f261;"></span>8.07%</td>
+            <td data-val="88.90">88.90%</td>
+            <td><span class="badge badge-ok">⚪ 回収済</span></td>
+          </tr>
+          <tr>
+            <td class="account-link">@___ponmk2___</td>
+            <td><span class="badge badge-tier1">Tier 1</span></td>
+            <td data-val="100077">100,077</td>
+            <td data-val="1.32"><span class="eng-dot" style="background:#4ecdc4;"></span>1.32%</td>
+            <td data-val="85.53">85.53%</td>
+            <td><span class="badge badge-ng">未回収</span></td>
+          </tr>
+          <tr>
+            <td class="account-link">@har_326</td>
+            <td><span class="badge badge-tier1">Tier 1</span></td>
+            <td data-val="96703">96,703</td>
+            <td data-val="0.00"><span class="eng-dot" style="background:#555;"></span>0.00%</td>
+            <td data-val="91.77">91.77%</td>
+            <td><span class="badge badge-ok">⚪ 回収済</span></td>
+          </tr>
+          <tr>
+            <td class="account-link">@uruuril</td>
+            <td><span class="badge badge-tier1">Tier 1</span></td>
+            <td data-val="74076">74,076</td>
+            <td data-val="1.10"><span class="eng-dot" style="background:#4ecdc4;"></span>1.10%</td>
+            <td data-val="54.61">54.61%</td>
+            <td><span class="badge badge-ok">⚪ 回収済</span></td>
+          </tr>
+          <tr>
+            <td class="account-link">@mizuho.04</td>
+            <td><span class="badge badge-tier3">Tier 3</span></td>
+            <td data-val="67245">67,245</td>
+            <td data-val="0.26"><span class="eng-dot" style="background:#555;"></span>0.26%</td>
+            <td data-val="64.39">64.39%</td>
+            <td><span class="badge badge-ok">⚪ 回収済</span></td>
+          </tr>
+          <tr>
+            <td class="account-link">@hinap_17</td>
+            <td><span class="badge badge-tier2">Tier 2</span></td>
+            <td data-val="60672">60,672</td>
+            <td data-val="0.16"><span class="eng-dot" style="background:#555;"></span>0.16%</td>
+            <td data-val="91.91">91.91%</td>
+            <td><span class="badge badge-ok">⚪ 回収済</span></td>
+          </tr>
+          <tr>
+            <td class="account-link">@ullmp_</td>
+            <td><span class="badge badge-tier2">Tier 2</span></td>
+            <td data-val="59016">59,016</td>
+            <td data-val="0.00"><span class="eng-dot" style="background:#555;"></span>0.00%</td>
+            <td data-val="73.84">73.84%</td>
+            <td><span class="badge badge-ok">⚪ 回収済</span></td>
+          </tr>
+          <tr>
+            <td class="account-link">@imusuka_</td>
+            <td><span class="badge badge-tier2">Tier 2</span></td>
+            <td data-val="42886">42,886</td>
+            <td data-val="0.54"><span class="eng-dot" style="background:#4ecdc4;"></span>0.54%</td>
+            <td data-val="66.29">66.29%</td>
+            <td><span class="badge badge-ng">未回収</span></td>
+          </tr>
+          <tr>
+            <td class="account-link">@ririka_konishi</td>
+            <td><span class="badge badge-tier3">Tier 3</span></td>
+            <td data-val="37799">37,799</td>
+            <td data-val="0.00"><span class="eng-dot" style="background:#555;"></span>0.00%</td>
+            <td data-val="74.26">74.26%</td>
+            <td><span class="badge badge-ok">⚪ 回収済</span></td>
+          </tr>
+          <tr>
+            <td class="account-link">@sayachan24_</td>
+            <td><span class="badge badge-tier2">Tier 2</span></td>
+            <td data-val="37199">37,199</td>
+            <td data-val="1.03"><span class="eng-dot" style="background:#4ecdc4;"></span>1.03%</td>
+            <td data-val="55.37">55.37%</td>
+            <td><span class="badge badge-ng">未回収</span></td>
+          </tr>
+          <tr>
+            <td class="account-link">@niki.kawabe</td>
+            <td><span class="badge badge-tier2">Tier 2</span></td>
+            <td data-val="31610">31,610</td>
+            <td data-val="0.87"><span class="eng-dot" style="background:#4ecdc4;"></span>0.87%</td>
+            <td data-val="63.80">63.80%</td>
+            <td><span class="badge badge-ng">未回収</span></td>
+          </tr>
+          <tr>
+            <td class="account-link">@saeeeoky</td>
+            <td><span class="badge badge-tier2">Tier 2</span></td>
+            <td data-val="30637">30,637</td>
+            <td data-val="2.68"><span class="eng-dot" style="background:#c8f261;"></span>2.68%</td>
+            <td data-val="54.38">54.38%</td>
+            <td><span class="badge badge-ok">⚪ 回収済</span></td>
+          </tr>
+          <tr>
+            <td class="account-link">@ai___ri___i</td>
+            <td><span class="badge badge-tier3">Tier 3</span></td>
+            <td data-val="30408">30,408</td>
+            <td data-val="1.23"><span class="eng-dot" style="background:#4ecdc4;"></span>1.23%</td>
+            <td data-val="91.90">91.90%</td>
+            <td><span class="badge badge-ok">⚪ 回収済</span></td>
+          </tr>
+          <tr>
+            <td class="account-link">@81vly</td>
+            <td><span class="badge badge-tier2">Tier 2</span></td>
+            <td data-val="25368">25,368</td>
+            <td data-val="0.00"><span class="eng-dot" style="background:#555;"></span>0.00%</td>
+            <td data-val="85.26">85.26%</td>
+            <td><span class="badge badge-ng">未回収</span></td>
+          </tr>
+          <tr>
+            <td class="account-link">@momoko_9512</td>
+            <td><span class="badge badge-tier3">Tier 3</span></td>
+            <td data-val="21176">21,176</td>
+            <td data-val="0.95"><span class="eng-dot" style="background:#4ecdc4;"></span>0.95%</td>
+            <td data-val="64.08">64.08%</td>
+            <td><span class="badge badge-ng">未回収</span></td>
+          </tr>
+          <tr>
+            <td class="account-link">@cococolily</td>
+            <td><span class="badge badge-tier2">Tier 2</span></td>
+            <td data-val="18867">18,867</td>
+            <td data-val="0.00"><span class="eng-dot" style="background:#555;"></span>0.00%</td>
+            <td data-val="86.51">86.51%</td>
+            <td><span class="badge badge-ok">⚪ 回収済</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PR Charts Grid -->
+    <div class="grid-3">
+      <div class="card" style="grid-column: span 2;">
+        <div class="card-title">フォロワー数ランキング（PR枠）</div>
+        <div class="chart-wrap" style="max-height:300px;">
+          <canvas id="chartPRBar"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Tier別構成</div>
+        <div class="donut-wrap">
+          <div class="chart-wrap" style="max-width:220px;max-height:220px;margin:0 auto;">
+            <canvas id="chartTier"></canvas>
+          </div>
+          <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px;width:100%;">
+            <div style="display:flex;align-items:center;gap:8px;font-size:12px;">
+              <span style="width:10px;height:10px;border-radius:50%;background:var(--tier1);display:inline-block;"></span>
+              <span style="color:var(--text2);">Tier 1</span>
+              <span style="margin-left:auto;font-weight:600;color:var(--tier1);">4名</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:12px;">
+              <span style="width:10px;height:10px;border-radius:50%;background:var(--tier2);display:inline-block;"></span>
+              <span style="color:var(--text2);">Tier 2</span>
+              <span style="margin-left:auto;font-weight:600;color:var(--tier2);">8名</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:12px;">
+              <span style="width:10px;height:10px;border-radius:50%;background:var(--tier3);display:inline-block;"></span>
+              <span style="color:var(--text2);">Tier 3</span>
+              <span style="margin-left:auto;font-weight:600;color:var(--tier3);">4名</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scatter chart -->
+    <div class="card" style="margin-top:20px;">
+      <div class="card-title">フォロワー数 × ENG率 散布図（バブルサイズ = 女性FW%）</div>
+      <div class="chart-wrap" style="max-height:320px;">
+        <canvas id="chartScatter"></canvas>
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:var(--text2);">
+        ※ バブルサイズは女性フォロワー比率を示しています。大きいほど女性フォロワー割合が高い。
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SECTION 3: UGC枠 ─── -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div class="section-title">ナノインフルエンサーUGC枠（32名）</div>
+      <div class="section-desc">完了 26名 / 未完了 6名</div>
+    </div>
+
+    <div class="stat-row" style="margin-bottom:24px;">
+      <div class="stat-pill">
+        <span class="num" style="color:var(--orange)">81.3%</span>
+        <span class="lbl">投稿完了率</span>
+      </div>
+      <div class="stat-pill">
+        <span class="num" style="color:var(--teal)">26名</span>
+        <span class="lbl">完了</span>
+      </div>
+      <div class="stat-pill">
+        <span class="num" style="color:var(--red)">6名</span>
+        <span class="lbl">未完了</span>
+      </div>
+      <div class="stat-pill">
+        <span class="num">661,741</span>
+        <span class="lbl">推計リーチ FW合計</span>
+      </div>
+    </div>
+
+    <!-- UGC Issues Callouts -->
+    <div style="margin-bottom:24px;">
+      <div class="callout">
+        <div class="callout-icon">🔴</div>
+        <div class="callout-body">
+          <h5>連絡不通・要緊急対応（3名）</h5>
+          <p>
+            <strong>@ayayuu32</strong>（FW:141,885）— 連絡取れず<br>
+            <strong>@yuur_02</strong>（FW:3,997）— 連絡取れず・差替対応中<br>
+            <strong>@yume012255</strong>（FW:10,780・ENG:35.83%）— 連絡取れず・投稿日確認中
+          </p>
+        </div>
+      </div>
+      <div class="callout">
+        <div class="callout-icon">🟠</div>
+        <div class="callout-body">
+          <h5>リマインド済み・フォロー中（2名）</h5>
+          <p>
+            <strong>@miyamais</strong>（FW:34,982）— 7/3リマインド済<br>
+            <strong>@mymt.mai</strong>（FW:16,142）— 対応中
+          </p>
+        </div>
+      </div>
+      <div class="callout">
+        <div class="callout-icon">🟡</div>
+        <div class="callout-body">
+          <h5>日程調整中（1名）</h5>
+          <p>
+            <strong>@rika.kitou</strong>（FW:90,659・ENG:2.99%）— 20日フィード希望
+          </p>
+        </div>
+      </div>
+      <div class="callout">
+        <div class="callout-icon">🔵</div>
+        <div class="callout-body">
+          <h5>配送不備（1名）</h5>
+          <p>
+            <strong>@hazumi_kato</strong>（FW:14,041）— 配送不備・再送中
+          </p>
+        </div>
+      </div>
+      <div class="callout">
+        <div class="callout-icon">⚪</div>
+        <div class="callout-body">
+          <h5>6.25未共有（複数）</h5>
+          <p>
+            <strong>@krnco__129, @kanamingram_24, @riho______nio, @yui____721, @___mocahome___, @nana_86t, @pyon__0828, @miyako.kurumi</strong> — 素材未共有
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- UGC全一覧テーブル -->
+    <div class="table-wrap">
+      <table id="ugcTable">
+        <thead>
+          <tr>
+            <th onclick="sortTable('ugcTable',0)">アカウント</th>
+            <th onclick="sortTable('ugcTable',1)">FW数</th>
+            <th onclick="sortTable('ugcTable',2)">ENG率</th>
+            <th onclick="sortTable('ugcTable',3)">投稿完了</th>
+            <th onclick="sortTable('ugcTable',4)">状況</th>
+          </tr>
+        </thead>
+        <tbody id="ugcTbody">
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─── SECTION 4: インサイト回収 ─── -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div class="section-title">インサイト回収状況（PR枠）</div>
+      <div class="section-desc">回収済み 10名 / 未回収 6名</div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">インサイト回収率（PR枠）</div>
+        <div class="donut-wrap">
+          <div class="chart-wrap" style="max-width:240px;max-height:240px;margin:0 auto;position:relative;">
+            <canvas id="chartInsight"></canvas>
+            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;">
+              <div style="font-size:28px;font-weight:700;color:var(--accent);line-height:1;">62.5%</div>
+              <div style="font-size:10px;color:var(--text2);">回収率</div>
+            </div>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:20px;">
+            <div style="text-align:center;">
+              <div style="font-size:22px;font-weight:700;color:var(--accent);">10</div>
+              <div style="font-size:11px;color:var(--text2);">回収済み</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:22px;font-weight:700;color:var(--red);">6</div>
+              <div style="font-size:11px;color:var(--text2);">未回収</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">回収状況詳細</div>
+        <div style="margin-bottom:16px;">
+          <div style="font-size:12px;font-weight:600;color:var(--accent);margin-bottom:10px;">✅ 回収済み（10名）</div>
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <div class="progress-row">
+              <div class="progress-label">tan___gram</div>
+              <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+              <div class="progress-val" style="color:var(--accent);font-size:11px;">⚪</div>
+            </div>
+            <div class="progress-row">
+              <div class="progress-label">har_326</div>
+              <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+              <div class="progress-val" style="color:var(--accent);font-size:11px;">⚪</div>
+            </div>
+            <div class="progress-row">
+              <div class="progress-label">uruuril</div>
+              <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+              <div class="progress-val" style="color:var(--accent);font-size:11px;">⚪</div>
+            </div>
+            <div class="progress-row">
+              <div class="progress-label">mizuho.04</div>
+              <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+              <div class="progress-val" style="color:var(--accent);font-size:11px;">⚪</div>
+            </div>
+            <div class="progress-row">
+              <div class="progress-label">hinap_17</div>
+              <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+              <div class="progress-val" style="color:var(--accent);font-size:11px;">⚪</div>
+            </div>
+            <div class="progress-row">
+              <div class="progress-label">ullmp_</div>
+              <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+              <div class="progress-val" style="color:var(--accent);font-size:11px;">⚪</div>
+            </div>
+            <div class="progress-row">
+              <div class="progress-label">ririka_konishi</div>
+              <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+              <div class="progress-val" style="color:var(--accent);font-size:11px;">⚪</div>
+            </div>
+            <div class="progress-row">
+              <div class="progress-label">saeeeoky</div>
+              <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+              <div class="progress-val" style="color:var(--accent);font-size:11px;">⚪</div>
+            </div>
+            <div class="progress-row">
+              <div class="progress-label">ai___ri___i</div>
+              <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+              <div class="progress-val" style="color:var(--accent);font-size:11px;">⚪</div>
+            </div>
+            <div class="progress-row">
+              <div class="progress-label">cococolily</div>
+              <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+              <div class="progress-val" style="color:var(--accent);font-size:11px;">⚪</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--red);margin-bottom:10px;">❌ 未回収（6名）</div>
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <div class="progress-row">
+              <div class="progress-label">___ponmk2___</div>
+              <div class="progress-track"><div class="progress-fill" style="width:0%;background:var(--red);"></div></div>
+              <div class="progress-val" style="color:var(--red);font-size:11px;">未</div>
+            </div>
+            <div class="progress-row">
+              <div class="progress-label">imusuka_</div>
+              <div class="progress-track"><div class="progress-fill" style="width:0%;background:var(--red);"></div></div>
+              <div class="progress-val" style="color:var(--red);font-size:11px;">未</div>
+            </div>
+            <div class="progress-row">
+              <div class="progress-label">sayachan24_</div>
+              <div class="progress-track"><div class="progress-fill" style="width:0%;background:var(--red);"></div></div>
+              <div class="progress-val" style="color:var(--red);font-size:11px;">未</div>
+            </div>
+            <div class="progress-row">
+              <div class="progress-label">niki.kawabe</div>
+              <div class="progress-track"><div class="progress-fill" style="width:0%;background:var(--red);"></div></div>
+              <div class="progress-val" style="color:var(--red);font-size:11px;">未</div>
+            </div>
+            <div class="progress-row">
+              <div class="progress-label">81vly</div>
+              <div class="progress-track"><div class="progress-fill" style="width:0%;background:var(--red);"></div></div>
+              <div class="progress-val" style="color:var(--red);font-size:11px;">未</div>
+            </div>
+            <div class="progress-row">
+              <div class="progress-label">momoko_9512</div>
+              <div class="progress-track"><div class="progress-fill" style="width:0%;background:var(--red);"></div></div>
+              <div class="progress-val" style="color:var(--red);font-size:11px;">未</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="banner">
+      <div class="banner-icon">📩</div>
+      <div class="banner-text">
+        <h4>追加インサイト回収予定</h4>
+        <p>未回収6名（@___ponmk2___, @imusuka_, @sayachan24_, @niki.kawabe, @81vly, @momoko_9512）に対し、順次リマインド送付を実施予定。目標回収率: <strong style="color:var(--accent)">100%</strong></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SECTION 5: 要フォローアクション ─── -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <div class="section-title">⚠️ 要フォローアクション</div>
+      <div class="section-desc">優先度順</div>
+    </div>
+    <div class="action-grid">
+      <div class="action-card err">
+        <h4>🔴 緊急対応（連絡不通）</h4>
+        <ul>
+          <li><span>@ayayuu32</span>（FW:141,885）連絡取れず</li>
+          <li><span>@yuur_02</span>（FW:3,997）差替対応中</li>
+          <li><span>@yume012255</span>（FW:10,780・ENG35.83%）投稿日確認中</li>
+        </ul>
+      </div>
+      <div class="action-card warn">
+        <h4>🟠 インサイト未回収（PR枠）</h4>
+        <ul>
+          <li><span>@___ponmk2___</span>（FW:100,077）</li>
+          <li><span>@imusuka_</span>（FW:42,886）</li>
+          <li><span>@sayachan24_</span>（FW:37,199）</li>
+          <li><span>@niki.kawabe</span>（FW:31,610）</li>
+          <li><span>@81vly</span>（FW:25,368）</li>
+          <li><span>@momoko_9512</span>（FW:21,176）</li>
+        </ul>
+      </div>
+      <div class="action-card warn">
+        <h4>🟡 7/2リマインド送付済み</h4>
+        <ul>
+          <li><span>@_o031.k</span>（FW:4,532）</li>
+          <li><span>@__mild.20</span>（FW:4,416）</li>
+        </ul>
+      </div>
+      <div class="action-card info">
+        <h4>🔵 日程調整中・配送対応</h4>
+        <ul>
+          <li><span>@rika.kitou</span>（FW:90,659）20日フィード希望</li>
+          <li><span>@hazumi_kato</span>（FW:14,041）配送不備・再送中</li>
+          <li><span>@m_0806u</span>（FW:8,230）対応中</li>
+        </ul>
+      </div>
+      <div class="action-card warn">
+        <h4>⚪ 6.25素材未共有（8名）</h4>
+        <ul>
+          <li><span>@krnco__129, @kanamingram_24</span></li>
+          <li><span>@riho______nio, @yui____721</span></li>
+          <li><span>@___mocahome___, @nana_86t</span></li>
+          <li><span>@pyon__0828, @miyako.kurumi</span></li>
+        </ul>
+      </div>
+      <div class="action-card info">
+        <h4>📊 DM履歴確認が必要</h4>
+        <ul>
+          <li><span>@hyinako</span>（FW:3,723・ENG:7.20%）DM履歴無</li>
+          <li><span>@miduki__10</span>（FW:1,554・ENG:7.01%）DM履歴無</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SECTION 6: 全データ一覧 ─── -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <div class="section-title">全インフルエンサーデータ一覧（48名）</div>
+      <div class="section-desc">列ヘッダークリックでソート</div>
+    </div>
+    <div class="table-wrap">
+      <table id="allTable">
+        <thead>
+          <tr>
+            <th onclick="sortTable('allTable',0)">アカウント</th>
+            <th onclick="sortTable('allTable',1)">枠</th>
+            <th onclick="sortTable('allTable',2)">FW数</th>
+            <th onclick="sortTable('allTable',3)">ENG率</th>
+            <th onclick="sortTable('allTable',4)">投稿完了</th>
+            <th onclick="sortTable('allTable',5)">状況・備考</th>
+          </tr>
+        </thead>
+        <tbody id="allTbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div>
+    <strong>GVA BOT</strong> — インフルエンサーPRキャンペーン レポート
+  </div>
+  <div>
+    作成日: 2026年7月6日 &nbsp;|&nbsp; PR枠 16名 + UGC枠 32名 = 計 48名
+  </div>
+</footer>
+
+<script>
+// ─── DATA ───
+const prData = [
+  { account:'tan___gram', tier:'tier1', fw:144145, eng:8.07, female:88.90, insight:true },
+  { account:'___ponmk2___', tier:'tier1', fw:100077, eng:1.32, female:85.53, insight:false },
+  { account:'har_326', tier:'tier1', fw:96703, eng:0.00, female:91.77, insight:true },
+  { account:'uruuril', tier:'tier1', fw:74076, eng:1.10, female:54.61, insight:true },
+  { account:'mizuho.04', tier:'tier3', fw:67245, eng:0.26, female:64.39, insight:true },
+  { account:'hinap_17', tier:'tier2', fw:60672, eng:0.16, female:91.91, insight:true },
+  { account:'ullmp_', tier:'tier2', fw:59016, eng:0.00, female:73.84, insight:true },
+  { account:'imusuka_', tier:'tier2', fw:42886, eng:0.54, female:66.29, insight:false },
+  { account:'ririka_konishi', tier:'tier3', fw:37799, eng:0.00, female:74.26, insight:true },
+  { account:'sayachan24_', tier:'tier2', fw:37199, eng:1.03, female:55.37, insight:false },
+  { account:'niki.kawabe', tier:'tier2', fw:31610, eng:0.87, female:63.80, insight:false },
+  { account:'saeeeoky', tier:'tier2', fw:30637, eng:2.68, female:54.38, insight:true },
+  { account:'ai___ri___i', tier:'tier3', fw:30408, eng:1.23, female:91.90, insight:true },
+  { account:'81vly', tier:'tier2', fw:25368, eng:0.00, female:85.26, insight:false },
+  { account:'momoko_9512', tier:'tier3', fw:21176, eng:0.95, female:64.08, insight:false },
+  { account:'cococolily', tier:'tier2', fw:18867, eng:0.00, female:86.51, insight:true },
+];
+
+const ugcData = [
+  { account:'______meg.s', fw:71165, eng:0.00, done:true, note:'' },
+  { account:'_o031.k', fw:4532, eng:0.00, done:true, note:'7.2リマインド' },
+  { account:'krnco__129', fw:23562, eng:0.00, done:false, note:'6.25未共有' },
+  { account:'imochaaaan', fw:26522, eng:0.00, done:true, note:'' },
+  { account:'__neinei__', fw:49082, eng:0.00, done:true, note:'' },
+  { account:'kanamingram_24', fw:62505, eng:3.58, done:true, note:'6.25未共有' },
+  { account:'rabbit.ryn__', fw:32283, eng:0.00, done:true, note:'' },
+  { account:'riho______nio', fw:29617, eng:0.00, done:true, note:'6.25未共有' },
+  { account:'ayana____12.24', fw:34937, eng:0.77, done:true, note:'' },
+  { account:'risako_goto', fw:23349, eng:0.92, done:true, note:'' },
+  { account:'ai__susan', fw:22402, eng:0.83, done:true, note:'' },
+  { account:'yui____721', fw:20116, eng:1.35, done:true, note:'6.25未共有' },
+  { account:'___mocahome___', fw:11068, eng:0.00, done:true, note:'6.25未共有' },
+  { account:'ayayuu32', fw:141885, eng:0.42, done:true, note:'連絡取れず' },
+  { account:'___y__u99', fw:3716, eng:0.00, done:true, note:'' },
+  { account:'_rlane_cafegm', fw:14021, eng:2.13, done:true, note:'' },
+  { account:'__yu.ua', fw:6045, eng:0.00, done:true, note:'' },
+  { account:'yuur_02', fw:3997, eng:0.00, done:false, note:'連絡取れず・差替対応中' },
+  { account:'nana_86t', fw:3579, eng:0.00, done:true, note:'6.25未共有' },
+  { account:'yume012255', fw:10780, eng:35.83, done:false, note:'連絡取れず・投稿日確認中' },
+  { account:'rika.kitou', fw:90659, eng:2.99, done:false, note:'20日フィード希望' },
+  { account:'pyon__0828', fw:3050, eng:0.00, done:true, note:'6.25未共有' },
+  { account:'__mild.20', fw:4416, eng:0.00, done:true, note:'7.2リマインド' },
+  { account:'miyako.kurumi', fw:3957, eng:0.00, done:true, note:'6.25未共有' },
+  { account:'mymt.mai', fw:16142, eng:0.97, done:false, note:'' },
+  { account:'miyamais', fw:34982, eng:0.17, done:false, note:'7.3リマインド' },
+  { account:'toitopoooo____', fw:5450, eng:0.40, done:true, note:'' },
+  { account:'sei', fw:3125, eng:9.63, done:true, note:'' },
+  { account:'hazumi_kato', fw:14041, eng:0.13, done:false, note:'配送不備・再送中' },
+  { account:'m_0806u', fw:8230, eng:5.22, done:false, note:'' },
+  { account:'hyinako', fw:3723, eng:7.20, done:true, note:'dm履歴無' },
+  { account:'miduki__10', fw:1554, eng:7.01, done:true, note:'dm履歴無' },
+];
+
+// ─── BUILD UGC TABLE ───
+const ugcTbody = document.getElementById('ugcTbody');
+ugcData.forEach(d => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td class="account-link">@${d.account}</td>
+    <td data-val="${d.fw}">${d.fw.toLocaleString()}</td>
+    <td data-val="${d.eng}">${d.eng.toFixed(2)}%</td>
+    <td>${d.done ? '<span class="badge badge-done">完了</span>' : '<span class="badge badge-ng">未完了</span>'}</td>
+    <td><span style="font-size:12px;color:var(--text2);">${d.note || '—'}</span></td>
+  `;
+  ugcTbody.appendChild(tr);
+});
+
+// ─── BUILD ALL TABLE ───
+const allTbody = document.getElementById('allTbody');
+prData.forEach(d => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td class="account-link">@${d.account}</td>
+    <td><span class="badge badge-${d.tier}">PR / ${d.tier.toUpperCase()}</span></td>
+    <td data-val="${d.fw}">${d.fw.toLocaleString()}</td>
+    <td data-val="${d.eng}">${d.eng.toFixed(2)}%</td>
+    <td><span class="badge badge-done">完了</span></td>
+    <td><span style="font-size:12px;color:var(--text2);">インサイト: ${d.insight ? '⚪ 回収済' : '未回収'}</span></td>
+  `;
+  allTbody.appendChild(tr);
+});
+ugcData.forEach(d => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td class="account-link">@${d.account}</td>
+    <td><span class="badge badge-tier2" style="background:rgba(200,242,97,0.06);color:#9090a8;border-color:rgba(255,255,255,0.1);">UGC</span></td>
+    <td data-val="${d.fw}">${d.fw.toLocaleString()}</td>
+    <td data-val="${d.eng}">${d.eng.toFixed(2)}%</td>
+    <td>${d.done ? '<span class="badge badge-done">完了</span>' : '<span class="badge badge-ng">未完了</span>'}</td>
+    <td><span style="font-size:12px;color:var(--text2);">${d.note || '—'}</span></td>
+  `;
+  allTbody.appendChild(tr);
+});
+
+// ─── SORT TABLE ───
+const sortState = {};
+function sortTable(id, col) {
+  const table = document.getElementById(id);
+  const thead = table.querySelector('thead');
+  const tbody = table.querySelector('tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  const key = id + '_' + col;
+  const asc = sortState[key] !== true;
+  sortState[key] = asc;
+
+  // update header classes
+  thead.querySelectorAll('th').forEach((th, i) => {
+    th.classList.remove('sort-asc','sort-desc');
+    if (i === col) th.classList.add(asc ? 'sort-asc' : 'sort-desc');
+  });
+
+  rows.sort((a,b) => {
+    const aCell = a.cells[col];
+    const bCell = b.cells[col];
+    const aVal = aCell.dataset.val !== undefined ? parseFloat(aCell.dataset.val) : aCell.textContent.trim();
+    const bVal = bCell.dataset.val !== undefined ? parseFloat(bCell.dataset.val) : bCell.textContent.trim();
+    if (typeof aVal === 'number') return asc ? aVal - bVal : bVal - aVal;
+    return asc ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+  });
+  rows.forEach(r => tbody.appendChild(r));
+}
+
+// ─── CHART.JS DEFAULTS ───
+Chart.defaults.color = '#9090a8';
+Chart.defaults.font.family = "'DM Sans', 'Noto Sans JP', sans-serif";
+Chart.defaults.font.size = 11;
+
+const ACCENT = '#c8f261';
+const RED = '#ff6b6b';
+const TEAL = '#4ecdc4';
+const PURPLE = '#a78bfa';
+const ORANGE = '#fb923c';
+
+// ─── CHART 1: 全体完了率ドーナツ ───
+new Chart(document.getElementById('chartDoneAll'), {
+  type: 'doughnut',
+  data: {
+    labels: ['完了 (42名)', '未完了 (6名)'],
+    datasets: [{
+      data: [42, 6],
+      backgroundColor: [ACCENT, RED],
+      borderColor: ['#0a0a0f'],
+      borderWidth: 3,
+      hoverOffset: 6,
+    }]
+  },
+  options: {
+    cutout: '68%',
+    plugins: {
+      legend: { position: 'bottom', labels: { padding: 16, boxWidth: 10, color: '#9090a8' } },
+      tooltip: { callbacks: { label: (c) => ` ${c.label}: ${c.raw}名 (${(c.raw/48*100).toFixed(1)}%)` } }
+    }
+  }
+});
+
+// ─── CHART 2: 枠別リーチ棒グラフ ───
+new Chart(document.getElementById('chartReach'), {
+  type: 'bar',
+  data: {
+    labels: ['PR枠（16名）', 'UGC枠（32名）'],
+    datasets: [{
+      label: '推計リーチ（FW数）',
+      data: [818785, 661741],
+      backgroundColor: [ACCENT + 'cc', TEAL + 'cc'],
+      borderColor: [ACCENT, TEAL],
+      borderWidth: 1.5,
+      borderRadius: 6,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: (c) => ` ${c.raw.toLocaleString()} FW` } }
+    },
+    scales: {
+      x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#9090a8' } },
+      y: {
+        grid: { color: 'rgba(255,255,255,0.04)' },
+        ticks: { color: '#9090a8', callback: v => (v/1000).toFixed(0) + 'K' }
+      }
+    }
+  }
+});
+
+// ─── CHART 3: PR枠FWランキング横棒 ───
+const prSorted = [...prData].sort((a,b) => b.fw - a.fw);
+new Chart(document.getElementById('chartPRBar'), {
+  type: 'bar',
+  data: {
+    labels: prSorted.map(d => '@' + d.account),
+    datasets: [{
+      label: 'フォロワー数',
+      data: prSorted.map(d => d.fw),
+      backgroundColor: prSorted.map(d =>
+        d.tier === 'tier1' ? ACCENT + 'cc' :
+        d.tier === 'tier2' ? TEAL + 'cc' : PURPLE + 'cc'
+      ),
+      borderColor: prSorted.map(d =>
+        d.tier === 'tier1' ? ACCENT :
+        d.tier === 'tier2' ? TEAL : PURPLE
+      ),
+      borderWidth: 1,
+      borderRadius: 4,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: (c) => ` ${c.raw.toLocaleString()} FW` } }
+    },
+    scales: {
+      x: {
+        grid: { color: 'rgba(255,255,255,0.04)' },
+        ticks: { color: '#9090a8', callback: v => (v/1000).toFixed(0) + 'K' }
+      },
+      y: {
+        grid: { color: 'rgba(255,255,255,0.04)' },
+        ticks: { color: '#9090a8', font: { size: 10 } }
+      }
+    }
+  }
+});
+
+// ─── CHART 4: tier構成ドーナツ ───
+new Chart(document.getElementById('chartTier'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Tier 1', 'Tier 2', 'Tier 3'],
+    datasets: [{
+      data: [4, 8, 4],
+      backgroundColor: [ACCENT + 'cc', TEAL + 'cc', PURPLE + 'cc'],
+      borderColor: ['#0a0a0f'],
+      borderWidth: 3,
+      hoverOffset: 6,
+    }]
+  },
+  options: {
+    cutout: '60%',
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: (c) => ` ${c.label}: ${c.raw}名` } }
+    }
+  }
+});
+
+// ─── CHART 5: 散布図 ───
+const scatterDatasets = [
+  { tier: 'tier1', color: ACCENT, label: 'Tier 1' },
+  { tier: 'tier2', color: TEAL, label: 'Tier 2' },
+  { tier: 'tier3', color: PURPLE, label: 'Tier 3' },
+].map(t => ({
+  label: t.label,
+  data: prData.filter(d => d.tier === t.tier).map(d => ({
+    x: d.fw,
+    y: d.eng,
+    r: Math.max(4, d.female / 8),
+    account: d.account,
+    female: d.female
+  })),
+  backgroundColor: t.color + '99',
+  borderColor: t.color,
+  borderWidth: 1.5,
+}));
+
+new Chart(document.getElementById('chartScatter'), {
+  type: 'bubble',
+  data: { datasets: scatterDatasets },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top', labels: { boxWidth: 10, color: '#9090a8' } },
+      tooltip: {
+        callbacks: {
+          label: (c) => {
+            const d = c.raw;
+            return [
+              ` @${d.account}`,
+              ` FW: ${c.raw.x.toLocaleString()}`,
+              ` ENG率: ${c.raw.y.toFixed(2)}%`,
+              ` 女性FW: ${d.female.toFixed(1)}%`
+            ];
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { color: 'rgba(255,255,255,0.04)' },
+        ticks: { color: '#9090a8', callback: v => (v/1000).toFixed(0) + 'K' },
+        title: { display: true, text: 'フォロワー数', color: '#9090a8' }
+      },
+      y: {
+        grid: { color: 'rgba(255,255,255,0.04)' },
+        ticks: { color: '#9090a8', callback: v => v + '%' },
+        title: { display: true, text: 'ENG率', color: '#9090a8' }
+      }
+    }
+  }
+});
+
+// ─── CHART 6: インサイト回収ドーナツ ───
+new Chart(document.getElementById('chartInsight'), {
+  type: 'doughnut',
+  data: {
+    labels: ['回収済み (10名)', '未回収 (6名)'],
+    datasets: [{
+      data: [10, 6],
+      backgroundColor: [ACCENT + 'cc', RED + 'cc'],
+      borderColor: ['#0a0a0f'],
+      borderWidth: 3,
+      hoverOffset: 6,
+    }]
+  },
+  options: {
+    cutout: '70%',
+    plugins: {
+      legend: { position: 'bottom', labels: { padding: 14, boxWidth: 10, color: '#9090a8' } },
+      tooltip: { callbacks: { label: (c) => ` ${c.label}: ${c.raw}名` } }
+    }
+  }
+});
+</script>
+</body>
+</html>
